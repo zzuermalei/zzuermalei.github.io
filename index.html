@@ -371,7 +371,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-08-25 00:38:11" itemprop="dateModified" datetime="2018-08-25T00:38:11+08:00">2018-08-25</time>
+                <time title="修改时间：2018-08-25 00:49:05" itemprop="dateModified" datetime="2018-08-25T00:49:05+08:00">2018-08-25</time>
               
             
           </span>
@@ -442,7 +442,7 @@
 <h4><span id="4一个nsobject对象占用多少内存">4.一个NSObject对象占用多少内存？</span></h4><blockquote>
 <p>既然 isa 本质上就是一个指针，一个指针在32位环境下占用4个字节，64位环境下占用8个字节。<strong>一个 NSObject 对象结构体内部就包含一个 isa 指针，那么，我们可以认为一个 NSObject 对象就占用8个字节么？ 错，虽然表面如此，但是实际上并不是。</strong> </p>
 </blockquote>
-<p>先上图：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSObject</span> *obj = [[<span class="built_in">NSObject</span> alloc] init];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得 NSObject 实例对象的成员变量所占用的大小 &gt;&gt; 8</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>, class_getInstanceSize([<span class="built_in">NSObject</span> <span class="keyword">class</span>])); <span class="comment">// 输出为8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得 obj 指针所指向内存的大小 &gt;&gt; 16</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>, malloc_size((__bridge <span class="keyword">const</span> <span class="keyword">void</span> *)(obj))); <span class="comment">// 输出为 16</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSObject</span> *obj = [[<span class="built_in">NSObject</span> alloc] init];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得 NSObject 实例对象的成员变量所占用的大小 &gt;&gt; 8</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>, class_getInstanceSize([<span class="built_in">NSObject</span> <span class="keyword">class</span>])); <span class="comment">// 输出为8</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得 obj 指针所指向内存的大小 &gt;&gt; 16</span></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%zd"</span>, malloc_size((__bridge <span class="keyword">const</span> <span class="keyword">void</span> *)(obj))); <span class="comment">// 输出为 16</span></span><br></pre></td></tr></table></figure>
 <p>我们也可以通过 Xcode -&gt; Debug -&gt; Debug Workflow -&gt; View Memory<br><img src="/2018/08/19/1.OC对象的本质/OC_4.png" alt="View Memory"><br>或者 LLDB 进行查看<br><img src="/2018/08/19/1.OC对象的本质/OC_5.png" alt="LLDB常用指令"></p>
 <p>这个是什么意思呢，<strong>其实一个 NSObject 实例对象的大小确实为8个字节，但是系统给其分配的内存其实是16个字节</strong>，接下来我们通过<strong>objc4源码</strong>来探究下到底是为什么。</p>
 <blockquote>
@@ -642,7 +642,7 @@
 <h2><span id="欢迎交流指点并提出宝贵意见">欢迎交流指点并提出宝贵意见</span></h2><ul>
 <li>Github：<a href="https://github.com/iStonesy" target="_blank" rel="noopener">@小马同学的Github</a></li>
 <li>简书：<a href="https://www.jianshu.com/u/03a336dff0ec" target="_blank" rel="noopener">@小马同学的简书</a></li>
-<li>邮箱：<a href="mailto:&#x7a;&#122;&#117;&#x6d;&#x61;&#x6c;&#101;&#x69;&#64;&#x31;&#54;&#51;&#x2e;&#x63;&#111;&#109;" target="_blank" rel="noopener">&#x7a;&#122;&#117;&#x6d;&#x61;&#x6c;&#101;&#x69;&#64;&#x31;&#54;&#51;&#x2e;&#x63;&#111;&#109;</a></li>
+<li>邮箱：<a href="mailto:&#122;&#122;&#x75;&#109;&#x61;&#x6c;&#x65;&#105;&#64;&#49;&#54;&#x33;&#x2e;&#99;&#x6f;&#109;" target="_blank" rel="noopener">&#122;&#122;&#x75;&#109;&#x61;&#x6c;&#x65;&#105;&#64;&#49;&#54;&#x33;&#x2e;&#99;&#x6f;&#109;</a></li>
 <li>QQ：492843636</li>
 </ul>
 
