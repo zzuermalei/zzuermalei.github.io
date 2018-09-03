@@ -111,7 +111,7 @@
   <meta name="description" content="iOS | OC对象本质 | Objective-C OC对象的分类，对象的isa指针指向哪里，superClass指针，OC的类信息存放在哪里？  上篇文章中，我们讲述了一个 NSObject实例对象，Person实例对象的本质，在内存中长什么样子。但是，上篇文章中讲的OC对象的本质，还不包括所有的OC对象。 1.OC对象的分类Objective-C中的对象，简称OC对象，主要可以分为 3 种：">
 <meta name="keywords" content="Objective-C,OC对象本质,iOS底层原理">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OC对象的本质（二）">
+<meta property="og:title" content="OC对象的本质（下）">
 <meta property="og:url" content="http://yoursite.com/2018/08/26/2.OC对象的本质/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
 <meta property="og:description" content="iOS | OC对象本质 | Objective-C OC对象的分类，对象的isa指针指向哪里，superClass指针，OC的类信息存放在哪里？  上篇文章中，我们讲述了一个 NSObject实例对象，Person实例对象的本质，在内存中长什么样子。但是，上篇文章中讲的OC对象的本质，还不包括所有的OC对象。 1.OC对象的分类Objective-C中的对象，简称OC对象，主要可以分为 3 种：">
@@ -121,11 +121,10 @@
 <meta property="og:image" content="http://yoursite.com/2018/08/26/2.OC对象的本质/OC_3.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/26/2.OC对象的本质/OC_4.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/26/2.OC对象的本质/OC_6.png">
-<meta property="og:image" content="http://yoursite.com/2018/08/26/2.OC对象的本质/OC_6.png">
 <meta property="og:image" content="http://yoursite.com/2018/08/26/2.OC对象的本质/OC_7.png">
-<meta property="og:updated_time" content="2018-09-01T20:01:00.789Z">
+<meta property="og:updated_time" content="2018-09-03T16:01:15.957Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OC对象的本质（二）">
+<meta name="twitter:title" content="OC对象的本质（下）">
 <meta name="twitter:description" content="iOS | OC对象本质 | Objective-C OC对象的分类，对象的isa指针指向哪里，superClass指针，OC的类信息存放在哪里？  上篇文章中，我们讲述了一个 NSObject实例对象，Person实例对象的本质，在内存中长什么样子。但是，上篇文章中讲的OC对象的本质，还不包括所有的OC对象。 1.OC对象的分类Objective-C中的对象，简称OC对象，主要可以分为 3 种：">
 <meta name="twitter:image" content="http://yoursite.com/2018/08/26/2.OC对象的本质/OC_1.png">
 
@@ -144,7 +143,7 @@
   };
 </script>
 
-  <title>OC对象的本质（二） | 小马同学的技术博客</title>
+  <title>OC对象的本质（下） | 小马同学的技术博客</title>
   
 
 
@@ -334,7 +333,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">OC对象的本质（二）
+          <h1 class="post-title" itemprop="name headline">OC对象的本质（下）
               
             
           </h1>
@@ -376,7 +375,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-02 04:01:00" itemprop="dateModified" datetime="2018-09-02T04:01:00+08:00">2018-09-02</time>
+                <time title="修改时间：2018-09-04 00:01:15" itemprop="dateModified" datetime="2018-09-04T00:01:15+08:00">2018-09-04</time>
               
             
           </span>
@@ -456,8 +455,8 @@
 <li>instance对象的<strong>isa</strong>指向class对象，当调用<strong>对象方法</strong>时，通过instance对象的<strong>isa</strong>找到class对象，最后找到<strong>对象方法</strong>的实现进行调用</li>
 <li>class对象的<strong>isa</strong>指向meta-class对象，当调用<strong>类方法</strong>时，通过class对象的<strong>isa</strong>找到meta-class对象，最后找到<strong>类方法</strong>的实现进行调用</li>
 </ul>
-<p><img src="/2018/08/26/2.OC对象的本质/OC_6.png" alt="superClass &amp;&amp; isa"><br><strong>注意：</strong>isa指针并不是直接指向对象地址值，还需要逻辑与上一个掩码 <strong>ISA_MASK</strong>，这个了解下就行，如果不了解的话可以直接理解为isa直接指向class对象、meta-class对象。</p>
-<p>####superClass指针<br>附上一张经典的图：<br><img src="/2018/08/26/2.OC对象的本质/OC_6.png" alt="superClass &amp;&amp; isa"><br><strong>总结如下：</strong></p>
+<p><strong>注意：</strong>isa指针并不是直接指向对象地址值，还需要逻辑与上一个掩码 <strong>ISA_MASK</strong>，这个了解下就行，如果不了解的话可以直接理解为isa直接指向class对象、meta-class对象。</p>
+<h4><span id="superclass指针">superClass指针</span></h4><p>附上一张经典的图：<br><img src="/2018/08/26/2.OC对象的本质/OC_6.png" alt="superClass &amp;&amp; isa"><br><strong>总结如下：</strong></p>
 <ul>
 <li>instance对象的isa指向class对象</li>
 <li>class对象的isa指向meta-class对象</li>
@@ -475,7 +474,7 @@
 <p>打开上篇文章带领大家下载的 <strong>objc4源码</strong>，搜索 struct objc_class， 找到 <strong>objc-runtime-new.h</strong> 中 结构体的最新定义：</p>
 <p>我们发现 struct objc_class : objc_object，<strong>结构体也可以继承</strong>，对，没错，这是 C++ 语法，C++ 里面的结构体跟类其实区别不大，基本上卫衣的区别是成员变量默认 public 还是private。C++ 结构体里面还可以定义方法。</p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> objc_object &#123;</span><br><span class="line">    private:</span><br><span class="line">    isa_t isa;</span><br><span class="line"></span><br><span class="line">    public:</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ISA() assumes this is NOT a tagged pointer object</span></span><br><span class="line">    Class ISA();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// getIsa() allows this to be a tagged pointer object</span></span><br><span class="line">    Class getIsa();</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">    方便理解，部分与本文讲述联系不大的先省略了，感兴趣的同学可以自行查看</span><br></pre></td></tr></table></figure>
-<p>我们可以发现：struct objc_object 结构体内部只有一个 isa 成员以及一些方法。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> objc_class : objc_object &#123;</span><br><span class="line">    <span class="comment">// Class ISA;</span></span><br><span class="line">    Class superclass;</span><br><span class="line">    cache_t cache;             <span class="comment">// formerly cache pointer and vtable</span></span><br><span class="line">    class_data_bits_t bits;    <span class="comment">// class_rw_t * plus custom rr/alloc flags</span></span><br><span class="line"></span><br><span class="line">    class_rw_t *data() &#123; </span><br><span class="line">    <span class="keyword">return</span> bits.data();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> setData(class_rw_t *newData) &#123;</span><br><span class="line">    bits.setData(newData);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> setInfo(uint32_t set) &#123;</span><br><span class="line">    assert(isFuture()  ||  isRealized());</span><br><span class="line">    data()-&gt;setFlags(set);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> clearInfo(uint32_t clear) &#123;</span><br><span class="line">    assert(isFuture()  ||  isRealized());</span><br><span class="line">    data()-&gt;clearFlags(clear);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">    方便理解，部分与本文讲述联系不大的先省略了，感兴趣的同学可以自行查看</span><br></pre></td></tr></table></figure></p>
+<p>我们可以发现：struct objc_object 结构体内部只有一个 isa 成员以及一些方法。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> objc_class : objc_object &#123;</span><br><span class="line">    <span class="comment">// Class ISA;</span></span><br><span class="line">    Class superclass;</span><br><span class="line">    cache_t cache;             <span class="comment">// formerly cache pointer and vtable</span></span><br><span class="line">    class_data_bits_t bits;    <span class="comment">// class_rw_t * plus custom rr/alloc flags</span></span><br><span class="line"></span><br><span class="line">    class_rw_t *data() &#123; </span><br><span class="line">        <span class="keyword">return</span> bits.data();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">void</span> setData(class_rw_t *newData) &#123;</span><br><span class="line">        bits.setData(newData);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> setInfo(uint32_t set) &#123;</span><br><span class="line">        assert(isFuture()  ||  isRealized());</span><br><span class="line">        data()-&gt;setFlags(set);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> clearInfo(uint32_t clear) &#123;</span><br><span class="line">        assert(isFuture()  ||  isRealized());</span><br><span class="line">        data()-&gt;clearFlags(clear);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">    方便理解，部分与本文讲述联系不大的先省略了，感兴趣的同学可以自行查看</span><br></pre></td></tr></table></figure></p>
 <p>我们发现其内部有一个 class_rw_t，即可读、可写、table，一个可读可写的表格，而且一些信息都在这个表格里面：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> class_rw_t &#123;</span><br><span class="line">    <span class="comment">// Be warned that Symbolication knows the layout of this structure.</span></span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t version;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> class_ro_t *ro;</span><br><span class="line"></span><br><span class="line">    method_array_t methods;</span><br><span class="line">    property_array_t properties;</span><br><span class="line">    protocol_array_t protocols;</span><br><span class="line"></span><br><span class="line">    ......</span><br><span class="line">    方便理解，部分与本文讲述联系不大的先省略了，感兴趣的同学可以自行查看</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> class_ro_t &#123;</span><br><span class="line">    uint32_t flags;</span><br><span class="line">    uint32_t instanceStart;</span><br><span class="line">    uint32_t instanceSize;</span><br><span class="line">    <span class="meta">#ifdef __LP64__</span></span><br><span class="line">    uint32_t reserved;</span><br><span class="line">    <span class="meta">#endif</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> uint8_t * ivarLayout;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> * name;</span><br><span class="line">    method_list_t * baseMethodList;</span><br><span class="line">    protocol_list_t * baseProtocols;</span><br><span class="line">    <span class="keyword">const</span> ivar_list_t * ivars;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> uint8_t * weakIvarLayout;</span><br><span class="line">    property_list_t *baseProperties;</span><br><span class="line"></span><br><span class="line">    method_list_t *baseMethods() <span class="keyword">const</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> baseMethodList;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p><strong>总结如下图：</strong><br><img src="/2018/08/26/2.OC对象的本质/OC_7.png" alt="struct objc_class的结构"></p>
 <p><strong>总结：</strong> 通过 struct objc_class 内部结构，内部确实有存放 方法、成员变量、协议 的数组，也证明 class对象/meta-class对象 内部确实是如我们所才像一样。对象方法、属性、成员变量、协议信息，存放在class对象中；类方法，存放在meta-class对象中；成员变量的具体值，存放在instance对象中。</p>
@@ -516,8 +515,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/19/1.OC对象的本质/" rel="next" title="OC对象的本质（一）">
-                <i class="fa fa-chevron-left"></i> OC对象的本质（一）
+              <a href="/2018/08/19/1.OC对象的本质/" rel="next" title="OC对象的本质（上）">
+                <i class="fa fa-chevron-left"></i> OC对象的本质（上）
               </a>
             
           </div>
@@ -687,7 +686,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.OC对象的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.isa指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3.窥探 objc_class 结构</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.OC对象的分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.isa指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">superClass指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">3.窥探 objc_class 结构</span></a></li></ol></div>
             
 
           </div>
