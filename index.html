@@ -308,6 +308,191 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/iOS中的线程同步方案-锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小马同学">
+      <meta itemprop="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小马同学的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/06/iOS中的线程同步方案-锁/" itemprop="url">
+                  iOS中的线程同步方案-锁
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-06 08:42:11 / 修改时间：08:43:09" itemprop="dateCreated datePublished" datetime="2018-09-06T08:42:11+08:00">2018-09-06</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3><span id="ios中的线程同步方案">iOS中的线程同步方案</span></h3><ul>
+<li>OSSpinLock</li>
+<li>os_unfair_lock</li>
+<li>pthread_mutex</li>
+<li>dispatch_semaphore</li>
+<li>dispatch_queue(DISPATCH_QUEUE_SERIAL)</li>
+<li>NSLock</li>
+<li>NSRecursiveLock</li>
+<li>NSCondition</li>
+<li>NSConditionLock</li>
+<li>@synchronized</li>
+</ul>
+<h4><span id="1osspinlock">1.OSSpinLock</span></h4><p>1&gt; OSSpinLock叫做“自旋锁”，等待锁的线程会处于忙等（busy-wait）状态，一直占用着CPU资源；High-level lock，高级锁，等不到锁时忙等，不会休眠<br>2&gt; 目前已经不再安全，可能会出现优先级反转问题<br>3&gt; 如果等待锁的优先级较高，它会一直占用着CPU资源，优先级低的线程就无法释放锁<br>4&gt; 需要导入头文件 #import <strong>&lt;libkern/OSAtomic.h&gt;</strong></p>
+<p><strong>自旋锁优先级反转：</strong>有两个线程，thread1（高优先级）、thread2（低优先级），thread2先进行加锁操作，CPU切换调度，thread1进入，发现已经被锁，进入自旋状态。由于thread1优先级比thread2高出很多，CPU接下来可能一直调度thread1，处于自旋状态，相当于一直执行不到thread2的解锁操作，造成优先级反转现象</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">OSSpinLock lock = OS_SPINLOCK_INIT;</span><br><span class="line"><span class="comment">// 尝试加锁（如果需要等待就不加锁，直接返回false；如果不需要等待就加锁，返回true）</span></span><br><span class="line"><span class="comment">// 加锁</span></span><br><span class="line">OSSpinLockLock(&amp;lock);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">OSSpinLockUnlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+<p>OSSpinLock是性能最高的锁，因为加锁操作耗时较短的话，忙等一会儿直接继续执行了；反之休眠的话唤醒也是需要耗性能的。但是现在已经不再安全了，所以苹果不建议我们再继续使用OSSpinLock了</p>
+<p>验证<strong>OSSpinLock自旋锁忙等</strong>：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p>Xcode -&gt; Debug Workflow -&gt; Always show Disassembly</p>
+<p>step:：代码级别一行一行走<br>stepi：汇编指令一行一行走，简称 si<br>nexti：汇编指令一行一行走，但是如果遇到函数调用不会进去，会直接跳过</p>
+<p>我们通过 si 指令，一行一行走，进入 OSSpinLockLock 函数，继续，进入 _OSSpinLockLockSlow 函数，这个时候要注意了：会一直在一块儿内存地址代码之间重复执行，这种就是典型的while循环，自旋锁，只有锁被放开之后才会往下继续执行</p>
+<h4><span id="2os_unfair_lock_lock">2.os_unfair_lock_lock</span></h4><p>1&gt; os_unfair_lock用于取代不安全的OSSpinLock，从iOS10开始支持<br>2&gt; 从底层调用看，等待os_unfair_lock锁的线程会处于休眠状态，并非忙等；Low-level lock,低级锁，等不到锁时休眠<br>3&gt; 需要导入头文件 #import <strong>&lt;os/lock.h&gt;</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化</span></span><br><span class="line">os_unfair_lock lock = OS_UNFAIR_LOCK_INIT;</span><br><span class="line"><span class="comment">// 尝试加锁</span></span><br><span class="line">os_unfair_lock_trylock(&amp;lock);</span><br><span class="line"><span class="comment">// 加锁</span></span><br><span class="line">os_unfair_lock_lock(&amp;lock);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">os_unfair_lock_unlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+<p>验证 <strong>os_unfair_lock_lock 非忙等</strong>：<br>os_unfair_lock_lock -&gt; _os_unfair_lock_lock_slow -&gt; __ulock_wait，进入之后，发现断点过着过着、到syscall时直接过去了，直接休眠了，这也说明os_unfair_lock_lock线程等待时并非忙等，而是休眠了</p>
+<p>####3. pthread_mutex<br>1&gt; mutex叫做“互斥锁”，等待锁的线程会处于休眠状态<br>2&gt; 需导入头文件 #import <strong>&lt;pthread.h&gt;</strong><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* Mutex type attributes</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 普通锁</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_NORMAL        0</span></span><br><span class="line"><span class="comment">// 检查错误的</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_ERRORCHECK    1</span></span><br><span class="line"><span class="comment">// 递归锁</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_RECURSIVE        2</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_DEFAULT        PTHREAD_MUTEX_NORMAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化锁的属性</span></span><br><span class="line">pthread_mutexattr_t attr;</span><br><span class="line">pthread_mutexattr_init(&amp;attr);</span><br><span class="line">pthread_mutexattr_settype(&amp;attr, PTHREAD_MUTEX_NORMAL)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_mutex_t mutex;</span><br><span class="line">pthread_mutex_init(&amp;mutex, &amp;attr);</span><br><span class="line"><span class="comment">// 尝试加锁</span></span><br><span class="line">pthread_mutex_trylock(&amp;mutex);</span><br><span class="line"><span class="comment">// 加锁</span></span><br><span class="line">pthread_mutex_lock(&amp;mutex);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">pthread_mutex_unlock(&amp;mutex);</span><br><span class="line"><span class="comment">// 销毁相关资源</span></span><br><span class="line">pthread_mutexattr_destroy(&amp;attr);</span><br><span class="line">pthread_mutex_destroy(&amp;mutex);</span><br></pre></td></tr></table></figure></p>
+<p>将属性attr的type由PTHREAD_MUTEX_NORMAL改为 PTHREAD_MUTEX_RECURSIVE，这个锁就变成了递归锁：允许 <strong>同一个线程</strong> 对 <strong>同一把锁</strong> 进行 <strong>重复加锁</strong></p>
+<p>####4.pthread_mutex - 递归锁<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutexattr_t attr;</span><br><span class="line">pthread_mutexattr_init(&amp;attr);</span><br><span class="line">pthread_mutexattr_settype(&amp;attr, PTHREAD_MUTEX_RECURSIVE)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_mutex_t mutex;</span><br><span class="line">pthread_mutex_init(&amp;mutex, &amp;attr);</span><br></pre></td></tr></table></figure></p>
+<p>####5.pthread_mutex - 条件<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_mutex_t mutex;</span><br><span class="line"><span class="comment">// NULL代表使用默认属性</span></span><br><span class="line">pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">// 初始化条件</span></span><br><span class="line">pthread_cond_t condition;</span><br><span class="line">pthread_cond_init(&amp;condition, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">// 等待条件（进入休眠，放开mutex锁；被唤醒后，会再次对mutex加锁）</span></span><br><span class="line">pthread_cond_wait(&amp;condition, &amp;mutex);</span><br><span class="line"><span class="comment">// 激活一个等待该条件的线程</span></span><br><span class="line">pthread_cond_signal(&amp;condition);</span><br><span class="line"><span class="comment">// 激活所有等待该条件的线程</span></span><br><span class="line">pthread_cond_broadcast(&amp;condition);</span><br><span class="line"><span class="comment">// 销毁资源</span></span><br><span class="line">pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">pthread_cond_destroy(&amp;condition);</span><br></pre></td></tr></table></figure></p>
+<p>####6.NSLock、NSRecurisiveLock<br>1&gt; NSLock是对mutex普通锁的封装<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">NSLocking</span></span></span><br><span class="line">- (<span class="keyword">void</span>)lock;</span><br><span class="line">- (<span class="keyword">void</span>)unlock;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSLock</span> : <span class="title">NSObject</span> &lt;<span class="title">NSLocking</span>&gt;</span></span><br><span class="line">- (<span class="built_in">BOOL</span>)tryLock;</span><br><span class="line">- (<span class="built_in">BOOL</span>)lockBeforeDate:(<span class="built_in">NSDate</span> *)limit;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/04/KVO的本质/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1384,7 +1569,7 @@
 <h2><span id="欢迎交流指点并提出宝贵意见">欢迎交流指点并提出宝贵意见</span></h2><ul>
 <li>Github：<a href="https://github.com/iStonesy" target="_blank" rel="noopener">@小马同学的Github</a></li>
 <li>简书：<a href="https://www.jianshu.com/u/03a336dff0ec" target="_blank" rel="noopener">@小马同学的简书</a></li>
-<li>邮箱：<a href="mailto:&#122;&#x7a;&#x75;&#x6d;&#x61;&#x6c;&#x65;&#x69;&#64;&#x31;&#x36;&#x33;&#46;&#99;&#111;&#x6d;" target="_blank" rel="noopener">&#122;&#x7a;&#x75;&#x6d;&#x61;&#x6c;&#x65;&#x69;&#64;&#x31;&#x36;&#x33;&#46;&#99;&#111;&#x6d;</a></li>
+<li>邮箱：<a href="mailto:&#122;&#122;&#117;&#109;&#97;&#108;&#101;&#105;&#64;&#49;&#54;&#x33;&#x2e;&#99;&#x6f;&#x6d;" target="_blank" rel="noopener">&#122;&#122;&#117;&#109;&#97;&#108;&#101;&#105;&#64;&#49;&#54;&#x33;&#x2e;&#99;&#x6f;&#x6d;</a></li>
 <li>QQ：492843636</li>
 </ul>
 
@@ -1472,7 +1657,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1514,7 +1699,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                    <span class="site-state-item-count">7</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
