@@ -108,18 +108,18 @@
 
 
 
-  <meta name="description" content="iOS中的线程同步方案、读写安全方案 OSSpinLock os_unfair_lock pthread_mutex dispatch_semaphore dispatch_queue(DISPATCH_QUEUE_SERIAL) NSLock NSRecursiveLock NSCondition NSConditionLock @synchronized  1.OSSpinLock1&amp;gt;">
+  <meta name="description" content="iOS中的线程同步方案 OSSpinLock os_unfair_lock pthread_mutex dispatch_semaphore dispatch_queue(DISPATCH_QUEUE_SERIAL) NSLock NSRecursiveLock NSCondition NSConditionLock @synchronized  1.OSSpinLock1&amp;gt; OSSpinL">
 <meta name="keywords" content="Objective-C,iOS底层原理,iOS中的线程同步方案">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS中的线程同步方案-锁">
+<meta property="og:title" content="iOS中的线程同步方案（锁）、读写安全方案">
 <meta property="og:url" content="http://yoursite.com/2018/09/06/iOS中的线程同步方案-锁/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS中的线程同步方案、读写安全方案 OSSpinLock os_unfair_lock pthread_mutex dispatch_semaphore dispatch_queue(DISPATCH_QUEUE_SERIAL) NSLock NSRecursiveLock NSCondition NSConditionLock @synchronized  1.OSSpinLock1&amp;gt;">
+<meta property="og:description" content="iOS中的线程同步方案 OSSpinLock os_unfair_lock pthread_mutex dispatch_semaphore dispatch_queue(DISPATCH_QUEUE_SERIAL) NSLock NSRecursiveLock NSCondition NSConditionLock @synchronized  1.OSSpinLock1&amp;gt; OSSpinL">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-07T17:24:33.742Z">
+<meta property="og:updated_time" content="2018-09-07T17:25:46.171Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS中的线程同步方案-锁">
-<meta name="twitter:description" content="iOS中的线程同步方案、读写安全方案 OSSpinLock os_unfair_lock pthread_mutex dispatch_semaphore dispatch_queue(DISPATCH_QUEUE_SERIAL) NSLock NSRecursiveLock NSCondition NSConditionLock @synchronized  1.OSSpinLock1&amp;gt;">
+<meta name="twitter:title" content="iOS中的线程同步方案（锁）、读写安全方案">
+<meta name="twitter:description" content="iOS中的线程同步方案 OSSpinLock os_unfair_lock pthread_mutex dispatch_semaphore dispatch_queue(DISPATCH_QUEUE_SERIAL) NSLock NSRecursiveLock NSCondition NSConditionLock @synchronized  1.OSSpinLock1&amp;gt; OSSpinL">
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>iOS中的线程同步方案-锁 | 小马同学的技术博客</title>
+  <title>iOS中的线程同步方案（锁）、读写安全方案 | 小马同学的技术博客</title>
   
 
 
@@ -326,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">iOS中的线程同步方案-锁
+          <h1 class="post-title" itemprop="name headline">iOS中的线程同步方案（锁）、读写安全方案
               
             
           </h1>
@@ -368,7 +368,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-08 01:24:33" itemprop="dateModified" datetime="2018-09-08T01:24:33+08:00">2018-09-08</time>
+                <time title="修改时间：2018-09-08 01:25:46" itemprop="dateModified" datetime="2018-09-08T01:25:46+08:00">2018-09-08</time>
               
             
           </span>
@@ -419,7 +419,7 @@
       
 
       
-        <h1><span id="ios中的线程同步方案-读写安全方案">iOS中的线程同步方案、读写安全方案</span></h1><ul>
+        <h1><span id="ios中的线程同步方案">iOS中的线程同步方案</span></h1><ul>
 <li>OSSpinLock</li>
 <li>os_unfair_lock</li>
 <li>pthread_mutex</li>
@@ -703,7 +703,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">iOS中的线程同步方案、读写安全方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">1.OSSpinLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">2.os_unfair_lock_lock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">3. pthread_mutex</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">4.pthread_mutex - 递归锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">5.pthread_mutex - 条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">6.NSLock、NSRecurisiveLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">7.NSCondition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">8.NSConditionLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">9.dispatch_queue(DISPATCH_QUEUE_SERIAL) GCD穿行队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">10.dispatch_semaphore</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">11.@synchronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">14.</span> <span class="nav-text">什么情况下使用自旋锁比较划算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">15.</span> <span class="nav-text">什么情况下使用互斥锁比较划算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">16.</span> <span class="nav-text">1.atomic</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">17.</span> <span class="nav-text">2.iOS中的读写安全方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">17.0.0.1.</span> <span class="nav-text">pthread_rwlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">17.0.0.2.</span> <span class="nav-text">dispatch_barrier_async</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">iOS中的线程同步方案</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">1.OSSpinLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">2.os_unfair_lock_lock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">3. pthread_mutex</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">4.pthread_mutex - 递归锁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">5.pthread_mutex - 条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">6.NSLock、NSRecurisiveLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">7.NSCondition</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">8.NSConditionLock</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">9.dispatch_queue(DISPATCH_QUEUE_SERIAL) GCD穿行队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">10.dispatch_semaphore</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">11.@synchronized</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">14.</span> <span class="nav-text">什么情况下使用自旋锁比较划算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">15.</span> <span class="nav-text">什么情况下使用互斥锁比较划算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">16.</span> <span class="nav-text">1.atomic</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">17.</span> <span class="nav-text">2.iOS中的读写安全方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">17.0.0.1.</span> <span class="nav-text">pthread_rwlock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">17.0.0.2.</span> <span class="nav-text">dispatch_barrier_async</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>
