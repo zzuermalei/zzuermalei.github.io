@@ -520,9 +520,7 @@
           
 
   
-    <div class="comments" id="comments">
-      <div id="gitalk-container"></div>
-    </div>
+    <div id="gitalk-container"></div>
 
   
 
@@ -825,8 +823,6 @@
 
   
 
-
-
   
 
 
@@ -838,7 +834,20 @@
 
 
 
-
+<link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+var gitalk = new Gitalk({
+clientID: '1de579c055d45f463cb2',
+clientSecret: '8816415048a7a3916140eb021cde2d4f98c106bb',
+repo: 'iStonesy.github.io',
+owner: 'iStonesy',
+admin: ['iStonesy'],
+id: location.pathname,
+distractionFreeMode: 'true'
+})
+gitalk.render('gitalk-container')
+</script>
 
 
 
