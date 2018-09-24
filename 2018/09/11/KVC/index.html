@@ -108,25 +108,28 @@
 
 
 
-  <meta name="description" content="iOS | Category | Objective-C Category的实现原理？Category和Class Extension的区别是什么？Category中的load方法时什么时候调用的？如何给分类添加属性？  通过前面章节，我们有学习到OC实例方法存储在class对象里面，类方法存储在meta-class里面，那么分类里面方法呢，难道是一个新的对象来进行存储么？ 答案肯定是否，clas">
-<meta name="keywords" content="Category">
+  <meta name="description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
+<meta name="keywords" content="KVC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Category">
-<meta property="og:url" content="http://yoursite.com/2018/09/11/Category/index.html">
+<meta property="og:title" content="KVC">
+<meta property="og:url" content="http://yoursite.com/2018/09/11/KVC/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS | Category | Objective-C Category的实现原理？Category和Class Extension的区别是什么？Category中的load方法时什么时候调用的？如何给分类添加属性？  通过前面章节，我们有学习到OC实例方法存储在class对象里面，类方法存储在meta-class里面，那么分类里面方法呢，难道是一个新的对象来进行存储么？ 答案肯定是否，clas">
+<meta property="og:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-15T03:27:56.802Z">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
+<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
+<meta property="og:updated_time" content="2018-09-24T14:26:28.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Category">
-<meta name="twitter:description" content="iOS | Category | Objective-C Category的实现原理？Category和Class Extension的区别是什么？Category中的load方法时什么时候调用的？如何给分类添加属性？  通过前面章节，我们有学习到OC实例方法存储在class对象里面，类方法存储在meta-class里面，那么分类里面方法呢，难道是一个新的对象来进行存储么？ 答案肯定是否，clas">
+<meta name="twitter:title" content="KVC">
+<meta name="twitter:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
+<meta name="twitter:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/11/Category/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/11/KVC/"/>
 
 
 
@@ -136,7 +139,7 @@
   };
 </script>
 
-  <title>Category | 小马同学的技术博客</title>
+  <title>KVC | 小马同学的技术博客</title>
   
 
 
@@ -309,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/Category/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/KVC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="小马同学">
@@ -326,7 +329,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Category
+          <h1 class="post-title" itemprop="name headline">KVC
               
             
           </h1>
@@ -351,7 +354,7 @@
                 
               
 
-              <time title="创建时间：2018-09-11 23:08:48" itemprop="dateCreated datePublished" datetime="2018-09-11T23:08:48+08:00">2018-09-11</time>
+              <time title="创建时间：2018-09-11 23:37:08" itemprop="dateCreated datePublished" datetime="2018-09-11T23:37:08+08:00">2018-09-11</time>
             
 
             
@@ -368,7 +371,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-15 11:27:56" itemprop="dateModified" datetime="2018-09-15T11:27:56+08:00">2018-09-15</time>
+                <time title="修改时间：2018-09-24 22:26:28" itemprop="dateModified" datetime="2018-09-24T22:26:28+08:00">2018-09-24</time>
               
             
           </span>
@@ -419,16 +422,16 @@
       
 
       
-        <p>iOS | Category | Objective-C</p>
-<p>Category的实现原理？Category和Class Extension的区别是什么？Category中的load方法时什么时候调用的？如何给分类添加属性？</p>
-<hr>
-<p>通过前面章节，我们有学习到OC实例方法存储在class对象里面，类方法存储在meta-class里面，那么分类里面方法呢，难道是一个新的对象来进行存储么？</p>
-<p>答案肯定是否，<strong>class对象、meta-class对象在内存中只会存在一份，分类里面的方法会合并到class对象、meta-class中</strong>。</p>
-<h2><span id="1category的实现原理">1.Category的实现原理</span></h2><p>Category内方法是什么时候合并到class、meta-class对象中的，是在编译阶段么？</p>
-<p>并不是，是在程序运行时通过runtime机制动态将分类的方法合并到class、meta-class对象中。下面来通过探索源码来进行分析验证。</p>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span> (<span class="title">Test_A</span>)</span></span><br><span class="line">+ (<span class="keyword">void</span>)testA;</span><br><span class="line">- (<span class="keyword">void</span>)testA;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span> (<span class="title">Test_A</span>)</span></span><br><span class="line">+ (<span class="keyword">void</span>)testA &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%s"</span>, __func__);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)testA &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%s"</span>, __func__);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<p>通过clang编译器将 Person+Test_A.m 文件转成cpp文件，搜索 struct _category_t {<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> _category_t &#123;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line"><span class="keyword">struct</span> _class_t *cls;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _method_list_t *instance_methods;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _method_list_t *class_methods;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _protocol_list_t *protocols;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _prop_list_t *properties;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>Person+Test_A这个分类在编译完，转成上面这种结构，Test_A分类里面的方法、协议、属性信息也是存储在这个结构体中。每编写一个分类，就相当于一个 struct _category_t 类型的结构体，在程序运行时，通过runtime机制动态的将这个结构体内部的方法、协议等合并到类对象中。</p>
+        <p>iOS | KVC | Objective-C</p>
+<p>通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？</p>
+<h2><span id="1kvc">1.KVC</span></h2><p>KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性</p>
+<p>常见API:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 赋值</span></span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKey:(<span class="built_in">NSString</span> *)key;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKey:(<span class="built_in">NSString</span> *)key;</span><br></pre></td></tr></table></figure></p>
+<h2><span id="2通过kvc修改属性会触发kvo么">2.通过KVC修改属性会触发KVO么</span></h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Observer</span></span></span><br><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSKeyValueChangeKey</span>,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, change);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observer *observer = [[Observer alloc] init];</span><br><span class="line">Person *person = [[Person alloc] init];</span><br><span class="line"></span><br><span class="line">[person addObserver:observer forKeyPath:<span class="string">@"age"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span>|<span class="built_in">NSKeyValueObservingOptionOld</span> context:<span class="literal">NULL</span>];</span><br><span class="line"></span><br><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br><span class="line"></span><br><span class="line">[person removeObserver:observer forKeyPath:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure>
+<p>通过控制台输出，发现是可以触发KVO的</p>
+<h2><span id="3setvalueforkey">3.setValue:forKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="setValue:forKey:"><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure></p>
+<p>上面这行代码相当于下面这几行，在对属性赋值的时候系统内部会自动调用 willChangeValueForKey 和 didChangeValueForKey，所以会触发 KVO，可以重写这两个方法进行验证。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[person willChangeValueForKey:<span class="string">@"age"</span>];</span><br><span class="line">person-&gt;_age = <span class="number">20</span>;</span><br><span class="line">[person didChangeValueForKey:<span class="string">@"key"</span>];</span><br></pre></td></tr></table></figure></p>
+<h2><span id="4valueforkey">4.valueForKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="valueForKey:"></p>
 
       
     </div>
@@ -449,7 +452,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Category/" rel="tag"># Category</a>
+            <a href="/tags/KVC/" rel="tag"># KVC</a>
           
         </div>
       
@@ -472,8 +475,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/09/18/KVC/" rel="prev" title="KVC">
-                KVC <i class="fa fa-chevron-right"></i>
+              <a href="/2018/09/18/Category/" rel="prev" title="Category">
+                Category <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -647,7 +650,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.Category的实现原理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.KVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.通过KVC修改属性会触发KVO么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3.setValue:forKey</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">4.valueForKey</span></a></li></ol></div>
             
 
           </div>
