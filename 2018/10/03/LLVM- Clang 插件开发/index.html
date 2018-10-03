@@ -108,28 +108,24 @@
 
 
 
-  <meta name="description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
-<meta name="keywords" content="KVC">
+  <meta name="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="KVC">
-<meta property="og:url" content="http://yoursite.com/2018/09/11/KVC/index.html">
+<meta property="og:title" content="插件开发">
+<meta property="og:url" content="http://yoursite.com/2018/10/03/LLVM- Clang 插件开发/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
+<meta property="og:description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
-<meta property="og:updated_time" content="2018-09-24T14:26:28.656Z">
+<meta property="og:updated_time" content="2018-10-03T05:59:05.624Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="KVC">
-<meta name="twitter:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
+<meta name="twitter:title" content="插件开发">
+<meta name="twitter:description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/11/KVC/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/03/LLVM- Clang 插件开发/"/>
 
 
 
@@ -139,7 +135,7 @@
   };
 </script>
 
-  <title>KVC | 小马同学的技术博客</title>
+  <title>插件开发 | 小马同学的技术博客</title>
   
 
 
@@ -312,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/KVC/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/03/LLVM- Clang 插件开发/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="小马同学">
@@ -329,7 +325,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">KVC
+          <h1 class="post-title" itemprop="name headline">插件开发
               
             
           </h1>
@@ -354,46 +350,12 @@
                 
               
 
-              <time title="创建时间：2018-09-11 23:37:08" itemprop="dateCreated datePublished" datetime="2018-09-11T23:37:08+08:00">2018-09-11</time>
+              <time title="创建时间：2018-10-03 13:59:05" itemprop="dateCreated datePublished" datetime="2018-10-03T13:59:05+08:00">2018-10-03</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-24 22:26:28" itemprop="dateModified" datetime="2018-09-24T22:26:28+08:00">2018-09-24</time>
-              
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -422,17 +384,7 @@
       
 
       
-        <p>iOS | KVC | Objective-C</p>
-<p>通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？</p>
-<h2><span id="1kvc">1.KVC</span></h2><p>KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性</p>
-<p>常见API:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 赋值</span></span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKey:(<span class="built_in">NSString</span> *)key;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKey:(<span class="built_in">NSString</span> *)key;</span><br></pre></td></tr></table></figure></p>
-<h2><span id="2通过kvc修改属性会触发kvo么">2.通过KVC修改属性会触发KVO么</span></h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Observer</span></span></span><br><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSKeyValueChangeKey</span>,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, change);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observer *observer = [[Observer alloc] init];</span><br><span class="line">Person *person = [[Person alloc] init];</span><br><span class="line"></span><br><span class="line">[person addObserver:observer forKeyPath:<span class="string">@"age"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span>|<span class="built_in">NSKeyValueObservingOptionOld</span> context:<span class="literal">NULL</span>];</span><br><span class="line"></span><br><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br><span class="line"></span><br><span class="line">[person removeObserver:observer forKeyPath:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure>
-<p>通过控制台输出，发现是可以触发KVO的</p>
-<h2><span id="3setvalueforkey">3.setValue:forKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="setValue:forKey:"><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure></p>
-<p>上面这行代码相当于下面这几行，在对属性赋值的时候系统内部会自动调用 willChangeValueForKey 和 didChangeValueForKey，所以会触发 KVO，可以重写这两个方法进行验证。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[person willChangeValueForKey:<span class="string">@"age"</span>];</span><br><span class="line">person-&gt;_age = <span class="number">20</span>;</span><br><span class="line">[person didChangeValueForKey:<span class="string">@"key"</span>];</span><br></pre></td></tr></table></figure></p>
-<h2><span id="4valueforkey">4.valueForKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="valueForKey:"></p>
-
+        
       
     </div>
 
@@ -450,12 +402,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/KVC/" rel="tag"># KVC</a>
-          
-        </div>
-      
 
       
       
@@ -465,8 +411,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/06/iOS中的线程同步方案-锁/" rel="next" title="iOS中的线程同步方案（锁）、读写安全方案">
-                <i class="fa fa-chevron-left"></i> iOS中的线程同步方案（锁）、读写安全方案
+              <a href="/2018/09/24/编译器王者-LLVM（上）/" rel="next" title="编译器王者-LLVM（上）">
+                <i class="fa fa-chevron-left"></i> 编译器王者-LLVM（上）
               </a>
             
           </div>
@@ -474,10 +420,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/18/Category/" rel="prev" title="Category">
-                Category <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -522,17 +464,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -644,22 +577,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.KVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.通过KVC修改属性会触发KVO么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3.setValue:forKey</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">4.valueForKey</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
