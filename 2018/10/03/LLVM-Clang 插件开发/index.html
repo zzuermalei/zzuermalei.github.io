@@ -108,17 +108,26 @@
 
 
 
-  <meta name="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+  <meta name="description" content="iOS | LLVM | Objective-C Clang 插件开发-准备$ cd LLVM_ALL/llvm/tools/clang/tools$ mkdir Your_Plugin_Dir_Name新建文件夹（自己的插件，eg. 我的文件夹命名为 mz-plugin，后面以我自己的文件目录讲解，各位同学在实践的时候请注意替换为自己的文件夹目录） 在 clang/tools 目录下 CMake">
+<meta name="keywords" content="LLVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LLVM-Clang 插件开发">
 <meta property="og:url" content="http://yoursite.com/2018/10/03/LLVM-Clang 插件开发/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+<meta property="og:description" content="iOS | LLVM | Objective-C Clang 插件开发-准备$ cd LLVM_ALL/llvm/tools/clang/tools$ mkdir Your_Plugin_Dir_Name新建文件夹（自己的插件，eg. 我的文件夹命名为 mz-plugin，后面以我自己的文件目录讲解，各位同学在实践的时候请注意替换为自己的文件夹目录） 在 clang/tools 目录下 CMake">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-03T06:05:59.240Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/Automatically%20Create%20Schemes.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/插件cpp文件.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/编译插件.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/Other%20C%20Flags.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/HackedClang.xcspec.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/Compiler.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/success.png">
+<meta property="og:updated_time" content="2018-10-03T13:13:34.643Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LLVM-Clang 插件开发">
-<meta name="twitter:description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+<meta name="twitter:description" content="iOS | LLVM | Objective-C Clang 插件开发-准备$ cd LLVM_ALL/llvm/tools/clang/tools$ mkdir Your_Plugin_Dir_Name新建文件夹（自己的插件，eg. 我的文件夹命名为 mz-plugin，后面以我自己的文件目录讲解，各位同学在实践的时候请注意替换为自己的文件夹目录） 在 clang/tools 目录下 CMake">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/03/LLVM-Clang%20插件开发/Automatically%20Create%20Schemes.png">
 
 
 
@@ -350,7 +359,7 @@
                 
               
 
-              <time title="创建时间：2018-10-03 13:59:05 / 修改时间：14:05:59" itemprop="dateCreated datePublished" datetime="2018-10-03T13:59:05+08:00">2018-10-03</time>
+              <time title="创建时间：2018-10-03 13:59:05 / 修改时间：21:13:34" itemprop="dateCreated datePublished" datetime="2018-10-03T13:59:05+08:00">2018-10-03</time>
             
 
             
@@ -360,6 +369,24 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编译原理/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -388,7 +415,27 @@
       
 
       
-        
+        <p>iOS | LLVM | Objective-C</p>
+<h1><span id="clang-插件开发-准备">Clang 插件开发-准备</span></h1><p><strong>$ cd LLVM_ALL/llvm/tools/clang/tools</strong><br><strong>$ mkdir Your_Plugin_Dir_Name</strong><br>新建文件夹（自己的插件，eg. 我的文件夹命名为 mz-plugin，后面以我自己的文件目录讲解，各位同学在实践的时候请注意替换为自己的文件夹目录）</p>
+<p>在 <strong>clang/tools</strong> 目录下 <strong>CMakeLists.txt</strong> 文件最下方添加我们自己的插件目录: <strong>add_clang_subdirectory(mz-plugin)</strong>，这样，clang 在编译时就会加载我们插件目录下的插件</p>
+<p><strong>$ cd mz-plugin</strong><br><strong>$ touch MZPlugin.cpp</strong><br><strong>$ touch CMakeLists.txt</strong></p>
+<p>编辑 <strong>CMakeLists.txt</strong>，添加下面这行：<br><strong>add_llvm_loadable_module(MZPlugin MZPlugin.cpp)</strong><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果有多个 cpp 文件，可以如下：</span></span><br><span class="line">add_llvm_loadable_module(MZPlugin </span><br><span class="line">MZPlugin1.cpp</span><br><span class="line">MZPlugin2.cpp</span><br><span class="line">MZPlugin3.cpp</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<h1><span id="编写插件">编写插件</span></h1><p>编写 C++ 文件，当然是用 IDE 方便了，在 <strong>llvm_xcode</strong> 目录下执行 <strong>cmake -G Xcode ../llvm</strong> 生成的模板工程，首次打开选择 <strong>Automatically Create Schemes</strong> 方式创建scheme<br><img src="/2018/10/03/LLVM-Clang 插件开发/Automatically Create Schemes.png" alt="Automatically Create Schemes"></p>
+<p>找到我们自己的插件 cpp 文件 <strong>Loadable modules/MZPlugin/MZPlugin.cpp</strong>，编写插件：<br><img src="/2018/10/03/LLVM-Clang 插件开发/插件cpp文件.png" alt="插件cpp文件"></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#include <span class="meta-string">"clang/AST/AST.h"</span></span></span><br><span class="line"><span class="meta">#include <span class="meta-string">"clang/AST/ASTConsumer.h"</span></span></span><br><span class="line"><span class="meta">#include <span class="meta-string">"clang/ASTMatchers/ASTMatchers.h"</span></span></span><br><span class="line"><span class="meta">#include <span class="meta-string">"clang/ASTMatchers/ASTMatchFinder.h"</span></span></span><br><span class="line"><span class="meta">#include <span class="meta-string">"clang/Frontend/CompilerInstance.h"</span></span></span><br><span class="line"><span class="meta">#include <span class="meta-string">"clang/Frontend/FrontendPluginRegistry.h"</span></span></span><br><span class="line"></span><br><span class="line">using namespace clang;</span><br><span class="line">using namespace std;</span><br><span class="line">using namespace llvm;</span><br><span class="line"></span><br><span class="line">namespace MZPlugin &#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> MZConsumer : public ASTConsumer &#123;</span><br><span class="line">    public:</span><br><span class="line">    <span class="comment">// 重写 HandleTranslationUnit，在每编译完成一个语法树时都会调用此方法</span></span><br><span class="line">    <span class="keyword">void</span> HandleTranslationUnit(ASTContext &amp;Ctx) &#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">"MZPlugin-HandlerTranslationUnit，编译完成一个语法树"</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 继承 PluginASTAction，重写两个方法</span></span><br><span class="line"><span class="keyword">class</span> MZAction: public PluginASTAction &#123;</span><br><span class="line">    public:</span><br><span class="line">    unique_ptr&lt;ASTConsumer&gt; CreateASTConsumer(CompilerInstance &amp;ci, StringRef isFile) &#123;</span><br><span class="line">        <span class="keyword">return</span> unique_ptr&lt;MZConsumer&gt; (new MZConsumer);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">bool</span> ParseArgs(<span class="keyword">const</span> CompilerInstance &amp;ci, <span class="keyword">const</span> vector&lt;string&gt; &amp;args) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">注册插件</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">1.static clang::FrontendPluginRegistry::Add&lt;MZPlugin::MZAction&gt;</span></span><br><span class="line"><span class="comment">2.泛型 声明 Add 类型，指定 MZPlugin 的 MZAction</span></span><br><span class="line"><span class="comment">3.官方给的示例用的 X 就按官方的来吧</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">@param "MZPlugin" 插件名称</span></span><br><span class="line"><span class="comment">@param clang-plugin." 插件描述</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">static</span> FrontendPluginRegistry::Add&lt;MZPlugin::MZAction&gt;</span><br><span class="line">X(<span class="string">"MZPlugin"</span>, <span class="string">"The MZPlugin is my first clang-plugin."</span>);</span><br></pre></td></tr></table></figure>
+<h1><span id="编译插件">编译插件</span></h1><p>编写完成之后，选择我们的插件 <strong>target</strong>，编译出 .dylib 插件文件：<br><img src="/2018/10/03/LLVM-Clang 插件开发/编译插件.png" alt="编译插件"></p>
+<p>编译成功之后，会在 <strong>llvm_xcode/Debug/lib/</strong> 目录下生成 <strong>MZPlugin.dylib</strong>文件</p>
+<h1><span id="使用插件">使用插件</span></h1><p>在Xcode 项目中指定加载插件动态库：Build Settings -&gt; Other C Flags:<br><strong>-Xclang -load -Xclang 动态库全路径 -Xclang -add-plugin -Xclang 插件名称</strong></p>
+<p>eg.-Xclang -load -Xclang /Users/<strong>username</strong>/Desktop/项目/LLVM_ALL<br>/llvm_xcode/Debug/lib/MZPlugin.dylib -Xclang -add-plugin -Xclang MZPlugin</p>
+<p><img src="/2018/10/03/LLVM-Clang 插件开发/Other C Flags.png" alt="Other C Flags"></p>
+<p>已经安耐不住激动的心情了么，编译项目，结果会报错，因为 Xcode  Build Settings <strong>Compiler for C/C++/Objective</strong> 默认编译器使用的是 <strong>Default compiler（Apple LLVM 9.0）</strong>，不让我们选择我们自己的编译器，我们还需要最后一步，Hack Xcode，然后才能修改默认的编译器</p>
+<h1><span id="hack-xcode">Hack Xcode</span></h1><p>下载 <a href="/download/插件开发/XcodeHacking.zip"><strong>XcodeHacking.zip</strong></a>，解压，修改 <strong>HackedClang.xcplugin/Contents/Resources/HackedClang.xcspec</strong>，将 ExecPath 位置 替换为我们刚才用 ninja 编译好的 clang 的全路径<br>eg.  /Users/<strong>username</strong>/Desktop/项目/LLVM_ALL/llvm_release/bin/clang<br><img src="/2018/10/03/LLVM-Clang 插件开发/HackedClang.xcspec.png" alt="HackedClang.xcspec"></p>
+<p>然后执行下面两行指令将这两个文件移至 Xcode 包中：<br><strong>$ sudo mv HackedClang.xcplugin <code>xcode-select -print-path</code>/../PlugIns<br>/Xcode3Core.ideplugin/Contents/SharedSupport/Developer/Library/Xcode/Plug-ins</strong></p>
+<p><strong>$ sudo mv HackedBuildSystem.xcspec <code>xcode-select -print-path</code>/Platforms<br>/iPhoneSimulator.platform/Developer/Library/Xcode/Specifications</strong></p>
+<p>完成之后，重启 Xcode，这时，我们就可以修改 Xcode 默认的编译器了<br><img src="/2018/10/03/LLVM-Clang 插件开发/Compiler.png" alt="Compiler for C/C++/Objective"></p>
+<p>选择 <strong>Clang LLVM Trunk</strong>，然后进行编译，这时候我们观察下便以信息，会发现，刚才我们输出我们在 <strong>HandleTranslationUnit</strong> 方法中的信息已经成功输出<br><img src="/2018/10/03/LLVM-Clang 插件开发/success.png" alt="success"></p>
+<h2><span id="总结">总结</span></h2><p>至此我们已经完成了一个简单的插件开发，如果需要开发更牛逼的功能，我们还需要对编译原理、语义分析等进行更深入的了解，感兴趣的童鞋可以深入研究</p>
+
       
     </div>
 
@@ -405,6 +452,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LLVM/" rel="tag"># LLVM</a>
+          
+        </div>
       
 
       
@@ -468,8 +521,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -581,6 +643,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Clang 插件开发-准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">编写插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">编译插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">使用插件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Hack Xcode</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.1.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

@@ -125,7 +125,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/09/24/编译器王者-LLVM/OC源文件编译过程1.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/24/编译器王者-LLVM/词法分析.png">
 <meta property="og:image" content="http://yoursite.com/2018/09/24/编译器王者-LLVM/语法树.png">
-<meta property="og:updated_time" content="2018-10-03T06:11:22.093Z">
+<meta property="og:updated_time" content="2018-10-03T09:26:10.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="编译器王者-LLVM">
 <meta name="twitter:description" content="iOS | LLVM | Objective-C LLVM 是什么？  The LLVM Project is a collection of modular and reusable compiler and toolchain technologies.官网：https://llvm.org/  LLVM 项目是模块化、可重用的编译器以及工具链技术的集合，美国计算机协会（ACM）将其2012年">
@@ -378,7 +378,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-03 14:11:22" itemprop="dateModified" datetime="2018-10-03T14:11:22+08:00">2018-10-03</time>
+                <time title="修改时间：2018-10-03 17:26:10" itemprop="dateModified" datetime="2018-10-03T17:26:10+08:00">2018-10-03</time>
               
             
           </span>
@@ -479,12 +479,14 @@
 <p><strong>注</strong>：ninja 如果安装失败，可以直接从 github 获取 release 版放入 <strong>/usr/local/bin</strong>中，<a href="https://github.com/ninja-build/ninja/releases" target="_blank" rel="noopener">https://github.com/ninja-build/ninja/releases</a></p>
 <hr>
 <p>在LLVM源码统计目录下新建一个 <strong>llvm_build</strong>目录（最终会在 <strong>llvm_build</strong> 目录下生成 <strong>build.ninja</strong>）</p>
-<p>/LLVM_ALL/llvm<br>/LLVM_ALL/llvm_build<br>/LLVM_ALL/llvm_release</p>
+<p>/LLVM_ALL/llvm<br>/LLVM_ALL/llvm_build<br>/LLVM_ALL/llvm_release<br>/LLVM_ALL/llvm_xcode</p>
 <p><strong>$ cd llvm_build</strong><br><strong>$ cmake -G Ninja ../llvm</strong>(指定 llvm 源码位置，会将 llvm 源码在llvm_build 目录下生成 ninja 的模板，注：llvm 路径需根据自己的 llvm 目录相对于 llvm_build 的位置) <strong>成功的标识</strong>：llvm_build 目录下生成 build.ninja 文件</p>
 <p><strong>指定LLVM编译目标路径：</strong><br><strong>$ cmake -G Ninja ../llvm -DCMAKE_INSTALL_PREFIX=LLVM的安装路径</strong><br>(eg.)  $ cmake -G Ninja ../llvm -DCMAKE_INSTALL_PREFIX=/users/<em>username</em>/Desktop/项目/LLVM_ALL/llvm_release/</p>
 <p>更多 cmake 相关选项，可以参考：<a href="https://llvm.org/docs/CMake.html" target="_blank" rel="noopener">https://llvm.org/docs/CMake.html</a></p>
 <hr>
 <p>依次执行编译、安装指令<br><strong>$ ninja</strong><br>编译完毕后， <strong>llvm_build</strong> 目录大概 21.61 G（仅供参考）<br><strong>$ ninja install</strong><br>安装完毕后，安装目录大概 12.21 G（仅供参考）</p>
+<hr>
+<p>生成 Xcode 模板工程，使用 Xcode 进行编译<br><strong>$ cd llvm_xcode</strong><br><strong>$ cmake -G Xcode ../llvm</strong></p>
 <h1><span id="应用与实践">应用与实践</span></h1><p>1&gt; libclang、libTooling<br>官方参考：<a href="https://clang.llvm.org/docs/Tooling.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/Tooling.html</a><br>应用：<strong>语法树分析</strong>、<strong>语言转换</strong>等</p>
 <p>2&gt; Clang 插件开发<br>官方参考：<br><a href="https://clang.llvm.org/docs/" target="_blank" rel="noopener">https://clang.llvm.org/docs/</a><br><a href="https://clang.llvm.org/docs/ClangPlugins.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/ClangPlugins.html</a><br><a href="https://clang.llvm.org/docs/ExternalClangExamples.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/ExternalClangExamples.html</a><br><a href="https://clang.llvm.org/docs/RAVFrontendAction.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/RAVFrontendAction.html</a><br>应用：<strong>代码检查（命名规范、代码规范）</strong>等</p>
 <p>3&gt; Pass开发<br>官方参考：<a href="http://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="noopener">http://llvm.org/docs/WritingAnLLVMPass.html</a><br>应用：<strong>代码优化</strong>、<strong>代码混淆</strong>等</p>
