@@ -108,18 +108,31 @@
 
 
 
-  <meta name="description" content="iOS | 越狱环境搭建 | Objective-C 1. 越狱环境搭建 调试设备：1&amp;gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）2&amp;gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备  系统版本：1&amp;gt; 版本不能太高，最好保证能够完美越狱2&amp;gt; 检查手机是否可以越狱选择系统版本 -&amp;gt;">
+  <meta name="description" content="iOS | 越狱环境搭建 | Objective-C 1.准备 调试设备：1&amp;gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）2&amp;gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备  系统版本：1&amp;gt; 版本不能太高，最好保证能够完美越狱2&amp;gt; 戳这里查看手机是否可以越狱选择系统版本 -&amp;gt;  选择设备 -&amp;gt; 查看是否支持越狱（最">
 <meta name="keywords" content="越狱环境搭建,逆向实战">
 <meta property="og:type" content="article">
 <meta property="og:title" content="1.越狱环境搭建">
 <meta property="og:url" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS | 越狱环境搭建 | Objective-C 1. 越狱环境搭建 调试设备：1&amp;gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）2&amp;gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备  系统版本：1&amp;gt; 版本不能太高，最好保证能够完美越狱2&amp;gt; 检查手机是否可以越狱选择系统版本 -&amp;gt;">
+<meta property="og:description" content="iOS | 越狱环境搭建 | Objective-C 1.准备 调试设备：1&amp;gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）2&amp;gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备  系统版本：1&amp;gt; 版本不能太高，最好保证能够完美越狱2&amp;gt; 戳这里查看手机是否可以越狱选择系统版本 -&amp;gt;  选择设备 -&amp;gt; 查看是否支持越狱（最">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-10-08T23:57:54.789Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/Cydia.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/PP助手-设备信息.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/Jay%20Freeman-saurik.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/添加软件源.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/安装软件.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/重启SpringBoard.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/Apple%20File%20Conduit%20%222%22.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/AppSync%20Unified.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/iFile.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/PP助手.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/建议安装顺序.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/iFile安装包安装.png">
+<meta property="og:updated_time" content="2018-10-19T16:51:27.590Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="1.越狱环境搭建">
-<meta name="twitter:description" content="iOS | 越狱环境搭建 | Objective-C 1. 越狱环境搭建 调试设备：1&amp;gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）2&amp;gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备  系统版本：1&amp;gt; 版本不能太高，最好保证能够完美越狱2&amp;gt; 检查手机是否可以越狱选择系统版本 -&amp;gt;">
+<meta name="twitter:description" content="iOS | 越狱环境搭建 | Objective-C 1.准备 调试设备：1&amp;gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）2&amp;gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备  系统版本：1&amp;gt; 版本不能太高，最好保证能够完美越狱2&amp;gt; 戳这里查看手机是否可以越狱选择系统版本 -&amp;gt;  选择设备 -&amp;gt; 查看是否支持越狱（最">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/09/1.越狱环境搭建/Cydia.png">
 
 
 
@@ -351,12 +364,24 @@
                 
               
 
-              <time title="创建时间：2018-10-09 08:00:00 / 修改时间：07:57:54" itemprop="dateCreated datePublished" datetime="2018-10-09T08:00:00+08:00">2018-10-09</time>
+              <time title="创建时间：2018-10-09 08:00:00" itemprop="dateCreated datePublished" datetime="2018-10-09T08:00:00+08:00">2018-10-09</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-20 00:51:27" itemprop="dateModified" datetime="2018-10-20T00:51:27+08:00">2018-10-20</time>
               
             
           </span>
@@ -408,12 +433,99 @@
 
       
         <p>iOS | 越狱环境搭建 | Objective-C</p>
-<h4><span id="1-越狱环境搭建">1. 越狱环境搭建</span></h4><ul>
+<h2><span id="1准备">1.准备</span></h2><ul>
 <li><p>调试设备：<br>1&gt; 建议至少iPhone5s（因为从5s开始支持arm64架构）<br>2&gt; 或者至少是iPad Air、iPad mini2等支持arm64架构的设备</p>
 </li>
-<li><p>系统版本：<br>1&gt; 版本不能太高，最好保证能够完美越狱<br>2&gt; <a href="http://jailbreak.25pp.com/ios" target="_blank" rel="noopener">检查手机是否可以越狱</a><br>选择系统版本 -&gt;</p>
+<li><p>系统版本：<br>1&gt; 版本不能太高，最好保证能够完美越狱<br>2&gt; <a href="http://jailbreak.25pp.com/ios" target="_blank" rel="noopener">戳这里查看手机是否可以越狱</a><br>选择系统版本 -&gt;  选择设备 -&gt; 查看是否支持越狱（最好支持完美越狱）</p>
 </li>
 </ul>
+<h2><span id="2ios-jailbreakios越狱">2.iOS Jailbreak（iOS越狱）</span></h2><p>利用iOS系统的漏洞，获取iOS系统的最高权限（Root），解开之前的各种限制（合法行为）</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li><p><strong>打造个性化、与众不同的iPhone</strong><br>1&gt; 自由安装各种实用的插件、主题、APP<br>2&gt; 修改系统APP的一些默认行为</p>
+</li>
+<li><p><strong>自由安装非AppSore来源的APP</strong><br>1&gt; “付费APP”秒变“免费APP”<br>2&gt; 未越狱iPhone安装APP的途径: AppStore、真机调试、通过证书打包签名ipa安装</p>
+</li>
+<li><p><strong>灵活管理文件系统，让iPhone可以像U盘那样灵活</strong></p>
+</li>
+<li><strong>给开发者提供了逆向工程的环境</strong></li>
+</ul>
+<p><strong>缺点：</strong> </p>
+<ul>
+<li><strong>不予保修</strong></li>
+<li><strong>费电，越狱后的iOS系统会常驻一些进程，耗电速度约提升10%~20%</strong></li>
+<li><strong>在新的iOS固件版本出来的时候，不能及时地进行更新</strong><br>1&gt; 每个新版本的固件，都会修复上一个版本的越狱漏洞，使越狱失效<br>2&gt; 如果需要保持越狱状态，要等待新的越狱程序发布时，才能升级相应的固件版本</li>
+<li><strong>不再受iOS系统默认的安全保护，容易被恶意软件攻击，个人隐私有被窃取的风险</strong></li>
+<li><strong>如果安装了不稳定的插件，容易让系统变得不稳定、变慢，甚至出现“白苹果”等问题</strong></li>
+</ul>
+<hr>
+<p><strong>完美越狱：</strong></p>
+<ul>
+<li>越狱后的iPhone可以正常关机和重启</li>
+</ul>
+<p><strong>不完美越狱：</strong></p>
+<ul>
+<li>iPhone一旦关机后再开机时，屏幕就会一直停留在启动画面，也就是“白苹果”状态</li>
+<li>或者能正常开机，但已经安装的破解软件都无法正常使用，需要将设备与PC连接后，使用软件进行引导才能使用</li>
+<li>一般说来，在苹果发布新的iOS固件后，针对该固件的不完美越狱会先发布，随后完美越狱才可能发布</li>
+<li>一般较新的系统版本，均为不完美越狱</li>
+</ul>
+<p><strong>越狱方法推荐：</strong><br><strong>PP助手：</strong><a href="http://jailbreak.25pp.com/" target="_blank" rel="noopener">http://jailbreak.25pp.com/</a></p>
+<p><strong>如何判断是否越狱成功？</strong></p>
+<ul>
+<li><strong>桌面是否有Cydia</strong><br><img src="/2018/10/09/1.越狱环境搭建/Cydia.png" alt="桌面是否有Cydia"></li>
+<li><strong>工具判断（eg. PP助手）</strong><br><img src="/2018/10/09/1.越狱环境搭建/PP助手-设备信息.png" alt="工具判断（比如PP助手）"></li>
+</ul>
+<h2><span id="3cydia">3.Cydia</span></h2><p><strong>1&gt; 越狱后的“App Store”</strong><br>可以在Cydia中安装各种第三方的软件（插件、补丁、APP）</p>
+<p><strong>2&gt; 作者</strong><br>Jay Freeman (saurik)<br><img src="/2018/10/09/1.越狱环境搭建/Jay Freeman-saurik.png" alt="Cydia"></p>
+<p><strong>Cydia安装软件的步骤:</strong><br><strong>1&gt;添加软件源:</strong><br><img src="/2018/10/09/1.越狱环境搭建/添加软件源.png" alt="添加软件源"><br><strong>2&gt;安装软件:</strong><br><img src="/2018/10/09/1.越狱环境搭建/安装软件.png" alt="安装软件"></p>
+<p><strong>SpringBoard</strong></p>
+<ul>
+<li>SpringBoard就是iOS的桌面</li>
+<li>有时候通过Cydia安装完插件后，可能会出现以下界面<br><img src="/2018/10/09/1.越狱环境搭建/重启SpringBoard.png" alt="重启SpringBoard"></li>
+</ul>
+<h2><span id="4必备软件安装">4.必备软件安装</span></h2><p><strong>Apple File Conduit “2”</strong></p>
+<ul>
+<li><strong>Apple File Conduit “2”补丁的作用：</strong><br>1&gt; 可以访问整个iOS设备的文件系统<br>2&gt; 类似的补丁还有：afc2、afc2add</li>
+<li><strong>软件源：</strong><br>1&gt; <a href="http://apt.saurik.com" target="_blank" rel="noopener">http://apt.saurik.com</a><br>2&gt; <a href="http://apt.25pp.com" target="_blank" rel="noopener">http://apt.25pp.com</a><br><img src="/2018/10/09/1.越狱环境搭建/Apple File Conduit &quot;2&quot;.png" alt="Apple File Conduit &quot;2&quot;"></li>
+</ul>
+<hr>
+<p><strong>AppSync Unified</strong></p>
+<ul>
+<li><strong>AppSync Unified补丁的作用：</strong><br>1&gt; 可以绕过系统验证，随意安装、运行破解的ipa安装包</li>
+<li><strong>软件源：</strong><br>1&gt; <a href="http://apt.25pp.com" target="_blank" rel="noopener">http://apt.25pp.com</a><br><img src="/2018/10/09/1.越狱环境搭建/AppSync Unified.png" alt="AppSync Unified"></li>
+</ul>
+<hr>
+<p><strong>iFile</strong></p>
+<ul>
+<li><strong>iFile的作用：</strong><br>1&gt; 可以在iPhone上自由访问iOS文件系统<br>2&gt; 类似的还有Filza File Manager、File Browser</li>
+<li><strong>软件源：</strong><br>1&gt; <a href="http://apt.thebigboss.org/repofiles/cydia" target="_blank" rel="noopener">http://apt.thebigboss.org/repofiles/cydia</a><br><img src="/2018/10/09/1.越狱环境搭建/iFile.png" alt="iFile"></li>
+</ul>
+<hr>
+<p><strong>PP助手</strong></p>
+<ul>
+<li><strong>PP助手的作用：</strong><br>1&gt; 可以利用PP助手自由安装海量APP</li>
+<li><strong>软件源：</strong><br>1&gt; <a href="http://apt.25pp.com/" target="_blank" rel="noopener">http://apt.25pp.com/</a><br><img src="/2018/10/09/1.越狱环境搭建/PP助手.png" alt="iFile"></li>
+</ul>
+<hr>
+<p><strong>Mac必备：</strong></p>
+<ul>
+<li><p><strong>iFunBox</strong><br>1&gt; 管理文件系统</p>
+</li>
+<li><p><strong>PP助手</strong><br>1&gt; 自由安装海量APP<br>2&gt; 卸载APP<br>3&gt; 备份APP为ipa安装包（iOS9开始，不再支持备份APP）</p>
+</li>
+</ul>
+<hr>
+<p><strong>建议安装顺序：</strong><br><img src="/2018/10/09/1.越狱环境搭建/建议安装顺序.png" alt="建议安装顺序"></p>
+<hr>
+<p><strong>安装包</strong></p>
+<ul>
+<li><strong>通常情况下</strong><br>1&gt; 通过Cydia安装的安装包是deb格式的（结合软件包管理工具apt）<br>2&gt; 通过PP助手安装的安装包是ipa格式的</li>
+<li><strong>如果通过Cydia源安装deb失败</strong><br>1&gt; 可以先从网上下载deb格式的安装包<br>2&gt; 然后打开 iFunBox -&gt; 文件系统，将deb安装包放到/var/root/Media/Cydia/AutoInstall<br>3&gt; 重启手机，Cydia就会自动安装deb</li>
+<li><strong>比如，下图是iFile 2.2.0-1所需的deb安装包</strong><br><a href="/download/1.越狱环境搭建/iFile2.2.0-1.zip">点击下载iFile安装包</a><br><img src="/2018/10/09/1.越狱环境搭建/iFile安装包安装.png" alt="iFile安装包安装"></li>
+</ul>
+<h2><span id="5如何在ios代码中判断设备是否越狱">5.如何在iOS代码中判断设备是否越狱？</span></h2><p><strong>1&gt; 针对不同iOS版本的判断方法可能不一样</strong><br><strong>2&gt; 最简单的一种方法：判断手机上是否安装了Cydia</strong><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="built_in">NSFileManager</span> defaultManager] fileExistsAtPath:<span class="string">@"/Applications/Cydia.app"</span>];</span><br></pre></td></tr></table></figure></p>
+<p>当然，不同系统版本判断方法可能不太一样，仅用这个方法判断是不严谨的，如果需要更完善的方法的同学们可自行谷歌</p>
 
       
     </div>
@@ -640,7 +752,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1. 越狱环境搭建</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.iOS Jailbreak（iOS越狱）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3.Cydia</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">4.必备软件安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">5.如何在iOS代码中判断设备是否越狱？</span></a></li></ol></div>
             
 
           </div>
