@@ -108,28 +108,32 @@
 
 
 
-  <meta name="description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
-<meta name="keywords" content="KVC">
+  <meta name="description" content="iOS | SSH | Objective-C 1.通过USB进行SSH登录 默认情况下，由于SSH走的是TCP协议，Mac是通过网络连接的方式SSH登录到iPhone，要求iPhone连接WiFi  为了加快传输速度，也可以通过USB连接的方式进行SSH登录1&amp;gt; Mac上有个服务程序usbmuxd（它会开机自动启动），可以将Mac的数据通过USB传输到iPhone：/System/Libr">
+<meta name="keywords" content="逆向实战,SSH">
 <meta property="og:type" content="article">
-<meta property="og:title" content="KVC">
-<meta property="og:url" content="http://yoursite.com/2018/09/11/KVC/index.html">
+<meta property="og:title" content="SSH(下)">
+<meta property="og:url" content="http://yoursite.com/2018/10/23/3.SSH/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
+<meta property="og:description" content="iOS | SSH | Objective-C 1.通过USB进行SSH登录 默认情况下，由于SSH走的是TCP协议，Mac是通过网络连接的方式SSH登录到iPhone，要求iPhone连接WiFi  为了加快传输速度，也可以通过USB连接的方式进行SSH登录1&amp;gt; Mac上有个服务程序usbmuxd（它会开机自动启动），可以将Mac的数据通过USB传输到iPhone：/System/Libr">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
-<meta property="og:updated_time" content="2018-09-24T14:26:28.656Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/3.SSH/SSH_Default.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/3.SSH/SSH_USB.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/3.SSH/!3.SSH/tcprelay_01.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/3.SSH/testCD_sh.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/3.SSH/sh_bash_source.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/23/3.SSH/VI%20IMproved.png">
+<meta property="og:updated_time" content="2018-10-27T17:53:05.424Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="KVC">
-<meta name="twitter:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
+<meta name="twitter:title" content="SSH(下)">
+<meta name="twitter:description" content="iOS | SSH | Objective-C 1.通过USB进行SSH登录 默认情况下，由于SSH走的是TCP协议，Mac是通过网络连接的方式SSH登录到iPhone，要求iPhone连接WiFi  为了加快传输速度，也可以通过USB连接的方式进行SSH登录1&amp;gt; Mac上有个服务程序usbmuxd（它会开机自动启动），可以将Mac的数据通过USB传输到iPhone：/System/Libr">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/23/3.SSH/SSH_Default.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/11/KVC/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/23/3.SSH/"/>
 
 
 
@@ -139,7 +143,7 @@
   };
 </script>
 
-  <title>KVC | 小马同学的技术博客</title>
+  <title>SSH(下) | 小马同学的技术博客</title>
   
 
 
@@ -312,7 +316,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/KVC/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/23/3.SSH/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="小马同学">
@@ -329,7 +333,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">KVC
+          <h1 class="post-title" itemprop="name headline">SSH(下)
               
             
           </h1>
@@ -354,7 +358,7 @@
                 
               
 
-              <time title="创建时间：2018-09-11 23:37:08" itemprop="dateCreated datePublished" datetime="2018-09-11T23:37:08+08:00">2018-09-11</time>
+              <time title="创建时间：2018-10-23 22:05:00" itemprop="dateCreated datePublished" datetime="2018-10-23T22:05:00+08:00">2018-10-23</time>
             
 
             
@@ -371,7 +375,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-24 22:26:28" itemprop="dateModified" datetime="2018-09-24T22:26:28+08:00">2018-09-24</time>
+                <time title="修改时间：2018-10-28 01:53:05" itemprop="dateModified" datetime="2018-10-28T01:53:05+08:00">2018-10-28</time>
               
             
           </span>
@@ -388,7 +392,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/逆向实战/" itemprop="url" rel="index"><span itemprop="name">逆向实战</span></a></span>
 
                 
                 
@@ -422,16 +426,34 @@
       
 
       
-        <p>iOS | KVC | Objective-C</p>
-<p>通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？</p>
-<h2><span id="1kvc">1.KVC</span></h2><p>KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性</p>
-<p>常见API:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 赋值</span></span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKey:(<span class="built_in">NSString</span> *)key;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKey:(<span class="built_in">NSString</span> *)key;</span><br></pre></td></tr></table></figure></p>
-<h2><span id="2通过kvc修改属性会触发kvo么">2.通过KVC修改属性会触发KVO么</span></h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Observer</span></span></span><br><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSKeyValueChangeKey</span>,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, change);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observer *observer = [[Observer alloc] init];</span><br><span class="line">Person *person = [[Person alloc] init];</span><br><span class="line"></span><br><span class="line">[person addObserver:observer forKeyPath:<span class="string">@"age"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span>|<span class="built_in">NSKeyValueObservingOptionOld</span> context:<span class="literal">NULL</span>];</span><br><span class="line"></span><br><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br><span class="line"></span><br><span class="line">[person removeObserver:observer forKeyPath:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure>
-<p>通过控制台输出，发现是可以触发KVO的</p>
-<h2><span id="3setvalueforkey">3.setValue:forKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="setValue:forKey:"><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure></p>
-<p>上面这行代码相当于下面这几行，在对属性赋值的时候系统内部会自动调用 willChangeValueForKey 和 didChangeValueForKey，所以会触发 KVO，可以重写这两个方法进行验证。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[person willChangeValueForKey:<span class="string">@"age"</span>];</span><br><span class="line">person-&gt;_age = <span class="number">20</span>;</span><br><span class="line">[person didChangeValueForKey:<span class="string">@"key"</span>];</span><br></pre></td></tr></table></figure></p>
-<h2><span id="4valueforkey">4.valueForKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="valueForKey:"></p>
+        <p>iOS | SSH | Objective-C</p>
+<h2><span id="1通过usb进行ssh登录">1.通过USB进行SSH登录</span></h2><ul>
+<li><p><strong>默认情况下，由于SSH走的是TCP协议，Mac是通过网络连接的方式SSH登录到iPhone，要求iPhone连接WiFi</strong><br><img src="/2018/10/23/3.SSH/SSH_Default.png" alt="SSH_Default"></p>
+</li>
+<li><p><strong>为了加快传输速度，也可以通过USB连接的方式进行SSH登录</strong><br>1&gt; Mac上有个服务程序usbmuxd（它会开机自动启动），可以将Mac的数据通过USB传输到iPhone：<br>/System/Library/PrivateFrameworks/MobileDevice.framework/Resources/usbmuxd<br><img src="/2018/10/23/3.SSH/SSH_USB.png" alt="SSH_USB"></p>
+</li>
+</ul>
+<h2><span id="2usbmuxd的使用">2.usbmuxd的使用</span></h2><ul>
+<li>下载usbmuxd工具包（下载v1.0.8版本，主要用到里面的一个python脚本：<strong>tcprelay.py</strong>）<br><a href="https://cgit.sukimashita.com/usbmuxd.git/snapshot/usbmuxd-1.0.8.tar.gz" target="_blank" rel="noopener">https://cgit.sukimashita.com/usbmuxd.git/snapshot/usbmuxd-1.0.8.tar.gz</a><br>如果下载失败，可尝试点此下载：<a href="/download/SSH/usbmuxd-1.0.8.tar.gz">usbmuxd-1.0.8.tar.gz</a></li>
+<li><strong>将iPhone的22端口（SSH端口）映射到Mac本地的10010端口</strong><br>1&gt; <strong>cd ~/Documents/usbmuxd-1.0.8/python-client</strong><br>2&gt; <strong>python tcprelay.py -t 22:10010</strong><br>加上-t参数是为了能够同时支持多个SSH连接<br><img src="/2018/10/23/3.SSH/!3.SSH/tcprelay_01.png" alt="tcprelay"></li>
+<li><strong>注意：要想保持端口映射状态，不能终止此命令行（如果要执行其他终端命令行，请新开一个终端界面）</strong></li>
+<li>不一定非要10010端口，只要不是保留端口就行</li>
+</ul>
+<hr>
+<ul>
+<li><strong>端口映射完毕后，以后如果想跟iPhone的22端口通信，直接跟Mac本地的10010端口通信就可以了</strong></li>
+<li>新开一个终端界面，SSH登录到Mac本地的10010端口（以下方式2选1）<br>1&gt; <strong>ssh root@localhost -p 10010</strong><br>2&gt; <strong>ssh <a href="mailto:root@192.168.31.26" target="_blank" rel="noopener">root@192.168.31.26</a> -p 10010</strong><br>注：(1) localhost是一个域名，指向的IP地址是192.168.31.26，本机虚拟网卡的IP地址<br>(2) usbmuxd会将Mac本地10010端口的TCP协议数据，通过USB连接转发到iPhone的22端口</li>
+<li><strong>远程拷贝文件也可以直接跟Mac本地的10010端口通信</strong><br>1&gt; <strong>scp -P 10010 ~/Desktop/test.txt root@localhost:~/test</strong><br>2&gt; 将Mac上的<strong>~/Desktop/test.txt</strong>文件，拷贝到iPhone上的<strong>~/test</strong>路径<br><strong>注意：</strong>scp的端口号参数是大写的-P</li>
+</ul>
+<h2><span id="3sh脚本文件">3.sh脚本文件</span></h2><ul>
+<li><strong>我们可以将经常执行的一系列终端命令行(比如：刚才提到的端口映射、ssh登录)放到sh脚本文件中（shell），然后执行脚本文件</strong><br><img src="/2018/10/23/3.SSH/testCD_sh.png" alt="testCD_sh"></li>
+<li>可以通过sh、bash、source命令来执行sh脚本文件<br><strong>sh、bash:</strong><br>1&gt; 当前shell环境会启动一个子进程来执行脚本文件，执行后返回到父进程的shell环境<br>2&gt; 执行cd时，在子进程中会进入到cd的目录，但是在父进程中环境并没有改变，也就是说目录没有改变<br><strong>source:</strong><br>1&gt; 在当前的shell环境下执行脚本文件<br>2&gt; 执行cd后会跳转到cd的目录<br><img src="/2018/10/23/3.SSH/sh_bash_source.png" alt="sh_bash_source"></li>
+</ul>
+<h2><span id="4ios终端的中文乱码问题">4.iOS终端的中文乱码问题</span></h2><ul>
+<li>默认情况下，iOS终端不支持中文输入和显示</li>
+<li>解决方案：新建一个<strong>~/.inputrc</strong>文件，文件内容是<br>1&gt; 不将中文字符转化为转义序列 :<br><strong>set convert-meta off</strong><br>2&gt; 允许向终端输出中文:<br><strong>set output-meta on</strong><br>3&gt; 允许向终端输入中文:<br><strong>set meta-flag on</strong><br><strong>set input-meta on</strong></li>
+<li>如果是想在终端编辑文件内容，可以通过Cydia安装一个vim（软件源<a href="http://apt.saurik.com）" target="_blank" rel="noopener">http://apt.saurik.com）</a><br><img src="/2018/10/23/3.SSH/VI IMproved.png" alt="VI IMproved"></li>
+</ul>
 
       
     </div>
@@ -452,7 +474,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/KVC/" rel="tag"># KVC</a>
+            <a href="/tags/逆向实战/" rel="tag"># 逆向实战</a>
+          
+            <a href="/tags/SSH/" rel="tag"># SSH</a>
           
         </div>
       
@@ -465,8 +489,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/06/iOS中的线程同步方案-锁/" rel="next" title="iOS中的线程同步方案（锁）、读写安全方案">
-                <i class="fa fa-chevron-left"></i> iOS中的线程同步方案（锁）、读写安全方案
+              <a href="/2018/10/17/2.SSH/" rel="next" title="SSH(上)">
+                <i class="fa fa-chevron-left"></i> SSH(上)
               </a>
             
           </div>
@@ -474,10 +498,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/18/Category/" rel="prev" title="Category">
-                Category <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -662,7 +682,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.KVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.通过KVC修改属性会触发KVO么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3.setValue:forKey</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">4.valueForKey</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">1.通过USB进行SSH登录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">2.usbmuxd的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">3.sh脚本文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">4.iOS终端的中文乱码问题</span></a></li></ol></div>
             
 
           </div>
