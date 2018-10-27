@@ -308,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/28/4.Cycript/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/24/4.Cycript/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="小马同学">
@@ -327,8 +327,8 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/28/4.Cycript/" itemprop="url">
-                  4.Cycript
+                <a class="post-title-link" href="/2018/10/24/4.Cycript/" itemprop="url">
+                  Cycript
                 </a>
               
             
@@ -354,12 +354,46 @@
                 
               
 
-              <time title="创建时间：2018-10-28 02:05:42" itemprop="dateCreated datePublished" datetime="2018-10-28T02:05:42+08:00">2018-10-28</time>
+              <time title="创建时间：2018-10-24 02:05:00" itemprop="dateCreated datePublished" datetime="2018-10-24T02:05:00+08:00">2018-10-24</time>
             
 
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-28 02:59:18" itemprop="dateModified" datetime="2018-10-28T02:59:18+08:00">2018-10-28</time>
+              
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/逆向实战/" itemprop="url" rel="index"><span itemprop="name">逆向实战</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -390,7 +424,43 @@
       
         
           
-            
+            <p>iOS | Cycript | Objective-C</p>
+<h2><span id="cycript">Cycript</span></h2><ul>
+<li>Cycript是Objective-C++、ES6（JavaScript）、Java等语法的混合物</li>
+<li>可以用来探索、修改、调试正在运行的Mac\iOS APP</li>
+<li>官网：<a href="http://www.cycript.org/" target="_blank" rel="noopener">http://www.cycript.org/</a></li>
+<li>文档：<a href="http://www.cycript.org/manual/" target="_blank" rel="noopener">http://www.cycript.org/manual/</a></li>
+<li>通过Cydia安装Cycript，即可在iPhone上调试运行中的APP<br><a href="4.Cycript/Cycript.png">Cycript</a></li>
+</ul>
+<h2><span id="cycript-的开启和关闭">Cycript 的开启和关闭</span></h2><ul>
+<li><strong>开启</strong><br>1&gt; cycript<br>2&gt; cycript -p 进程ID<br>3&gt; cycript -p 进程名称<br><img src="/2018/10/24/4.Cycript/Cycript_open_close.png" alt="Cycript_open_close"></li>
+<li><strong>取消输入：Ctrl + C</strong></li>
+<li><strong>退出：Ctrl + D</strong></li>
+<li><strong>清屏：Command + R</strong></li>
+</ul>
+<h2><span id="ps命令">ps命令</span></h2><ul>
+<li>安装adv-cmds<br><img src="/2018/10/24/4.Cycript/ps.png" alt="ps"></li>
+<li>ps命令是process status的缩写，使用ps命令可以列出系统当前的进程<br>1&gt; 列出所有的进程<br><strong>ps –A</strong><br><strong>ps aux</strong><br>2&gt; 搜索关键词<br><strong>ps –A | grep 关键词</strong></li>
+</ul>
+<h2><span id="常用语法">常用语法</span></h2><ul>
+<li><strong>UIApp</strong><br>[UIApplication sharedApplication]</li>
+<li><strong>定义变量</strong><br>var 变量名 = 变量值</li>
+<li><strong>用内存地址获取对象</strong><br>#内存地址</li>
+<li><strong>ObjectiveC.classes</strong><br>已加载的所有OC类</li>
+<li><strong>查看对象的所有成员变量</strong><br>*对象<br><img src="/2018/10/24/4.Cycript/常用语法.png" alt="常用语法"></li>
+</ul>
+<hr>
+<ul>
+<li><strong>递归打印view的所有子控件（跟LLDB一样的函数）</strong><br>view.recursiveDescription().toString()</li>
+<li>筛选出某种类型的对象<br>choose(UIViewController)<br>choose(UITableViewCell)</li>
+</ul>
+<h2><span id="封装cycript-cy文件编写">封装Cycript - .cy文件编写</span></h2><ul>
+<li>我们可以将常用的Cycript代码封装在一个.cy文件中</li>
+<li>exports参数名固定，用于向外提供接口<br><img src="/2018/10/24/4.Cycript/封装Cycript.png" alt="cy文件编写"></li>
+</ul>
+<hr>
+<p><strong>封装Cycript - 存放和使用.cy文件：</strong><br>1&gt; 将.cy文件存放到/usr/lib/cycript0.9目录下<br>2&gt; 在Cycript中引用.cy文件，并使用它提供的接口<br><img src="/2018/10/24/4.Cycript/cy文件存放.png" alt="cy文件存放、使用"></p>
+
           
         
       
