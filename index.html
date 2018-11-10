@@ -369,7 +369,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-11 02:12:15" itemprop="dateModified" datetime="2018-11-11T02:12:15+08:00">2018-11-11</time>
+                <time title="修改时间：2018-11-11 03:05:34" itemprop="dateModified" datetime="2018-11-11T03:05:34+08:00">2018-11-11</time>
               
             
           </span>
@@ -456,7 +456,8 @@
 <h2><span id="6动态库共享缓存dyld-shared-cache">6.动态库共享缓存（dyld shared cache）</span></h2><ul>
 <li><p>从iOS3.1开始，为了提高性能，绝大部分的系统动态库文件都打包存放到了一个缓存文件中（dyld shared cache）<br>缓存文件路径：/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm<strong>X</strong></p>
 </li>
-<li><p>dyld_shared_cache_arm<strong>X</strong>的<strong>X</strong>代表ARM处理器指令集架构<br>| ARM架构  | 设备 |<br>| :——: | :——-|<br>| V6 | iPhone、iPhone3G <br> iPod Touch、iPod Touch2 |<br>| v7 | iPhone3GS、iPhone4、iPhone4S <br> iPad、iPad2、iPad3(The New iPad) <br> iPad mini <br> iPod Touch3G、iPod Touch4、iPod Touch5 |<br>| v7s | iPhone5、iPhone5C <br> iPad4 |<br>| arm64 | iPhone5S、iPhone6、iPhone6 Plus、iPhone6S、iPhone6S Plus <br> iPhoneSE、iPhone7、iPhone7 Plus、iPhone8、iPhone8 Plus、iPhoneX、iPhoneXR、iPhoneXS <br> iPad5、iPad Air、iPad Air2、iPad Pro、iPad Pro2 <br> iPad mini with Retina display、iPad mini3、iPad mini4 <br> iPod Touch6|</p>
+<li><p>dyld_shared_cache_arm<strong>X</strong>的<strong>X</strong>代表ARM处理器指令集架构</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">v6</span><br><span class="line">iPhone、iPhone3G</span><br><span class="line">iPod Touch、iPod Touch2</span><br><span class="line"></span><br><span class="line">v7</span><br><span class="line">iPhone3GS、iPhone4、iPhone4S</span><br><span class="line">iPad、iPad2、iPad3(The New iPad)</span><br><span class="line">iPad mini</span><br><span class="line">iPod Touch3G、iPod Touch4、iPod Touch5</span><br><span class="line"></span><br><span class="line">v7s</span><br><span class="line">iPhone5、iPhone5C</span><br><span class="line">iPad4</span><br><span class="line"></span><br><span class="line">arm64</span><br><span class="line">iPhone5S、iPhone6、iPhone6 Plus、iPhone6S、iPhone6S Plus</span><br><span class="line">iPhoneSE、iPhone7、iPhone7 Plus、iPhone8、iPhone8 Plus、iPhoneX、iPhoneXR、iPhoneXS</span><br><span class="line">iPad5、iPad Air、iPad Air2、iPad Pro、iPad Pro2</span><br><span class="line">iPad mini with Retina display、iPad mini3、iPad mini4</span><br><span class="line">iPod Touch6</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>所有指令集原则上都是向下兼容的</p>
 </li>
