@@ -106,28 +106,34 @@
 
 
 
-  <meta name="description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
-<meta name="keywords" content="KVC">
+  <meta name="description" content="iOS | Mach-O | Objective-C 1.APP从开发到安装到手机的过程  2.逆向APP的思路 界面分析Cycript、Reveal  代码分析1&amp;gt; 对Mach-O文件的静态分析2&amp;gt; MachOView、class-dump、Hopper Disassembler、ida等  动态调试1&amp;gt; 对运行中的APP进行代码调试2&amp;gt; debugserver、LLDB">
+<meta name="keywords" content="逆向实战,SSH">
 <meta property="og:type" content="article">
-<meta property="og:title" content="KVC">
-<meta property="og:url" content="http://yoursite.com/2018/09/11/KVC/index.html">
+<meta property="og:title" content="Mach-O">
+<meta property="og:url" content="http://yoursite.com/2018/11/04/6.Mach-O/index.html">
 <meta property="og:site_name" content="小马同学的技术博客">
-<meta property="og:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
+<meta property="og:description" content="iOS | Mach-O | Objective-C 1.APP从开发到安装到手机的过程  2.逆向APP的思路 界面分析Cycript、Reveal  代码分析1&amp;gt; 对Mach-O文件的静态分析2&amp;gt; MachOView、class-dump、Hopper Disassembler、ida等  动态调试1&amp;gt; 对运行中的APP进行代码调试2&amp;gt; debugserver、LLDB">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
-<meta property="og:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
-<meta property="og:updated_time" content="2018-09-24T14:26:28.656Z">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/APP从开发到安装到手机_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/APP从开发到安装到手机_2.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/class-dump.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/代码编译过程_1.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/代码编译过程_2.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/动态库共享缓存.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/Mach-O_Type.png">
+<meta property="og:image" content="http://yoursite.com/2018/11/04/6.Mach-O/Mach-O结构.png">
+<meta property="og:updated_time" content="2018-11-10T18:12:15.519Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="KVC">
-<meta name="twitter:description" content="iOS | KVC | Objective-C 通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？ 1.KVCKVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性 常见API:12345// 赋值- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;- (void)setValu">
-<meta name="twitter:image" content="http://yoursite.com/2018/09/11/KVC/setValueForKey.png">
+<meta name="twitter:title" content="Mach-O">
+<meta name="twitter:description" content="iOS | Mach-O | Objective-C 1.APP从开发到安装到手机的过程  2.逆向APP的思路 界面分析Cycript、Reveal  代码分析1&amp;gt; 对Mach-O文件的静态分析2&amp;gt; MachOView、class-dump、Hopper Disassembler、ida等  动态调试1&amp;gt; 对运行中的APP进行代码调试2&amp;gt; debugserver、LLDB">
+<meta name="twitter:image" content="http://yoursite.com/2018/11/04/6.Mach-O/APP从开发到安装到手机_1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/11/KVC/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/11/04/6.Mach-O/"/>
 
 
 
@@ -137,7 +143,7 @@
   };
 </script>
 
-  <title>KVC | 小马同学的技术博客</title>
+  <title>Mach-O | 小马同学的技术博客</title>
   
 
 
@@ -310,7 +316,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/KVC/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/04/6.Mach-O/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="小马同学">
@@ -327,7 +333,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">KVC
+          <h1 class="post-title" itemprop="name headline">Mach-O
               
             
           </h1>
@@ -352,7 +358,7 @@
                 
               
 
-              <time title="创建时间：2018-09-11 23:37:08" itemprop="dateCreated datePublished" datetime="2018-09-11T23:37:08+08:00">2018-09-11</time>
+              <time title="创建时间：2018-11-04 16:11:44" itemprop="dateCreated datePublished" datetime="2018-11-04T16:11:44+08:00">2018-11-04</time>
             
 
             
@@ -369,7 +375,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-24 22:26:28" itemprop="dateModified" datetime="2018-09-24T22:26:28+08:00">2018-09-24</time>
+                <time title="修改时间：2018-11-11 02:12:15" itemprop="dateModified" datetime="2018-11-11T02:12:15+08:00">2018-11-11</time>
               
             
           </span>
@@ -386,7 +392,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/逆向实战/" itemprop="url" rel="index"><span itemprop="name">逆向实战</span></a></span>
 
                 
                 
@@ -420,16 +426,111 @@
       
 
       
-        <p>iOS | KVC | Objective-C</p>
-<p>通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？</p>
-<h2><span id="1kvc">1.KVC</span></h2><p>KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性</p>
-<p>常见API:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 赋值</span></span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKey:(<span class="built_in">NSString</span> *)key;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKey:(<span class="built_in">NSString</span> *)key;</span><br></pre></td></tr></table></figure></p>
-<h2><span id="2通过kvc修改属性会触发kvo么">2.通过KVC修改属性会触发KVO么</span></h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Observer</span></span></span><br><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSKeyValueChangeKey</span>,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, change);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observer *observer = [[Observer alloc] init];</span><br><span class="line">Person *person = [[Person alloc] init];</span><br><span class="line"></span><br><span class="line">[person addObserver:observer forKeyPath:<span class="string">@"age"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span>|<span class="built_in">NSKeyValueObservingOptionOld</span> context:<span class="literal">NULL</span>];</span><br><span class="line"></span><br><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br><span class="line"></span><br><span class="line">[person removeObserver:observer forKeyPath:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure>
-<p>通过控制台输出，发现是可以触发KVO的</p>
-<h2><span id="3setvalueforkey">3.setValue:forKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="setValue:forKey:"><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure></p>
-<p>上面这行代码相当于下面这几行，在对属性赋值的时候系统内部会自动调用 willChangeValueForKey 和 didChangeValueForKey，所以会触发 KVO，可以重写这两个方法进行验证。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[person willChangeValueForKey:<span class="string">@"age"</span>];</span><br><span class="line">person-&gt;_age = <span class="number">20</span>;</span><br><span class="line">[person didChangeValueForKey:<span class="string">@"key"</span>];</span><br></pre></td></tr></table></figure></p>
-<h2><span id="4valueforkey">4.valueForKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="valueForKey:"></p>
+        <p>iOS | Mach-O | Objective-C</p>
+<h2><span id="1app从开发到安装到手机的过程">1.APP从开发到安装到手机的过程</span></h2><p><img src="/2018/11/04/6.Mach-O/APP从开发到安装到手机_1.png" alt="APP从开发到安装到手机_1"></p>
+<p><img src="/2018/11/04/6.Mach-O/APP从开发到安装到手机_2.png" alt="APP从开发到安装到手机_2"></p>
+<h2><span id="2逆向app的思路">2.逆向APP的思路</span></h2><ul>
+<li><p>界面分析<br>Cycript、Reveal</p>
+</li>
+<li><p>代码分析<br>1&gt; 对Mach-O文件的静态分析<br>2&gt; MachOView、class-dump、Hopper Disassembler、ida等</p>
+</li>
+<li><p>动态调试<br>1&gt; 对运行中的APP进行代码调试<br>2&gt; debugserver、LLDB</p>
+</li>
+<li><p>代码编写<br>1&gt; 注入代码到APP中<br>2&gt; 必要时还可能需要重新签名、打包ipa</p>
+</li>
+</ul>
+<h2><span id="3class-dump">3.class-dump</span></h2><ul>
+<li><p>顾名思义，它的作用就是把Mach-O文件的class信息给dump出来（把类信息给导出来），生成对应的.h头文件</p>
+</li>
+<li><p>官方地址：<a href="http://stevenygard.com/projects/class-dump/" target="_blank" rel="noopener">http://stevenygard.com/projects/class-dump/</a><br><img src="/2018/11/04/6.Mach-O/class-dump.png" alt="class-dump"></p>
+</li>
+<li><p>下载完工具包后将class-dump文件复制到Mac的/usr/local/bin目录，这样在终端就能识别class-dump命令了</p>
+</li>
+<li><p>常用格式<br>1&gt; <strong>class-dump  -H  Mach-O文件路径  -o  头文件存放目录</strong><br>2&gt; -H表示要生成头文件<br>3&gt; -o用于制定头文件的存放目录</p>
+</li>
+</ul>
+<h2><span id="4代码的编译过程">4.代码的编译过程</span></h2><p><img src="/2018/11/04/6.Mach-O/代码编译过程_1.png" alt="代码编译过程_1"></p>
+<p><strong>不同的OC代码，编译出来的汇编代码可能是一样的:</strong><br><img src="/2018/11/04/6.Mach-O/代码编译过程_2.png" alt="代码编译过程_2"></p>
+<h2><span id="5hopper-disassmbler">5.Hopper Disassmbler</span></h2><ul>
+<li><p>Hopper Disassmbler能够将Mach-O文件的机器语言代码反编译成汇编代码、OC伪代码或者Swift伪代码</p>
+</li>
+<li><p>常用快捷键<br>找出哪里引用了这个方法：<strong>Shift + Option + X</strong></p>
+</li>
+</ul>
+<h2><span id="6动态库共享缓存dyld-shared-cache">6.动态库共享缓存（dyld shared cache）</span></h2><ul>
+<li><p>从iOS3.1开始，为了提高性能，绝大部分的系统动态库文件都打包存放到了一个缓存文件中（dyld shared cache）<br>缓存文件路径：/System/Library/Caches/com.apple.dyld/dyld_shared_cache_arm<strong>X</strong></p>
+</li>
+<li><p>dyld_shared_cache_arm<strong>X</strong>的<strong>X</strong>代表ARM处理器指令集架构<br>| ARM架构  | 设备 |<br>| :——: | :——-|<br>| V6 | iPhone、iPhone3G <br> iPod Touch、iPod Touch2 |<br>| v7 | iPhone3GS、iPhone4、iPhone4S <br> iPad、iPad2、iPad3(The New iPad) <br> iPad mini <br> iPod Touch3G、iPod Touch4、iPod Touch5 |<br>| v7s | iPhone5、iPhone5C <br> iPad4 |<br>| arm64 | iPhone5S、iPhone6、iPhone6 Plus、iPhone6S、iPhone6S Plus <br> iPhoneSE、iPhone7、iPhone7 Plus、iPhone8、iPhone8 Plus、iPhoneX、iPhoneXR、iPhoneXS <br> iPad5、iPad Air、iPad Air2、iPad Pro、iPad Pro2 <br> iPad mini with Retina display、iPad mini3、iPad mini4 <br> iPod Touch6|</p>
+</li>
+<li><p>所有指令集原则上都是向下兼容的</p>
+</li>
+<li>动态库共享缓存一个非常明显的好处是节省内存</li>
+<li>现在的ida、Hopper反编译工具都可以识别动态库共享缓存</li>
+</ul>
+<p><img src="/2018/11/04/6.Mach-O/动态库共享缓存.png" alt="动态库共享缓存"></p>
+<h2><span id="7动态库的加载">7.动态库的加载</span></h2><ul>
+<li><p>在Mac/iOS中，是使用了/usr/lib/dyld程序来加载动态库<br><strong>dyld:</strong><br>1&gt; dynamic link editor，动态链接编辑器<br>2&gt; dynamic loader，动态加载器</p>
+</li>
+<li><p>dyld源码<br><a href="https://opensource.apple.com/tarballs/dyld/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/dyld/</a></p>
+</li>
+</ul>
+<h2><span id="8从动态库共享缓存抽取动态库">8.从动态库共享缓存抽取动态库</span></h2><ul>
+<li>可以使用 dyld 源码中的 <strong>launch-cache/dsc_extractor.cpp</strong><br>1&gt; 将#if 0前面的代码删除（包括#if 0），把最后面的#endif也删掉<br>2&gt; 编译dsc_extractor.cpp<br><strong>clang++ -o dsc_extractor dsc_extractor.cpp</strong><br>3&gt; 使用dsc_extractor<br><strong>./dsc_extractor  动态库共享缓存文件的路径   用于存放抽取结果的文件夹</strong></li>
+</ul>
+<h2><span id="9mach-o">9.Mach-O</span></h2><ul>
+<li><p>Mach-O是Mach object的缩写，是Mac\iOS上用于存储程序、库的标准格式</p>
+</li>
+<li><p>属于Mach-O格式的文件类型有<br><img src="/2018/11/04/6.Mach-O/Mach-O_Type.png" alt="Mach-O_Type"></p>
+</li>
+<li><p>可以在xnu源码中，查看到Mach-O格式的详细定义: <a href="https://opensource.apple.com/tarballs/xnu/" target="_blank" rel="noopener">https://opensource.apple.com/tarballs/xnu/</a><br>1&gt; EXTERNAL_HEADERS/mach-o/fat.h<br>2&gt; EXTERNAL_HEADERS/mach-o/loader.h</p>
+</li>
+</ul>
+<hr>
+<p><strong>常见的Mach-O文件类型：</strong></p>
+<ul>
+<li><p><strong>MH_OBJECT</strong><br>1&gt; 目标文件（.o）<br>2&gt; 静态库文件(.a），静态库其实就是N个.o合并在一起</p>
+</li>
+<li><p><strong>MH_EXECUTE</strong>：可执行文件<br>.app/xx</p>
+</li>
+<li><p><strong>MH_DYLIB</strong>：动态库文件<br>1&gt; .dylib<br>2&gt; .framework/xx</p>
+</li>
+<li><p><strong>MH_DYLINKER</strong>：动态链接编辑器<br>/usr/lib/dyld</p>
+</li>
+<li><p><strong>MH_DSYM</strong>：存储着二进制文件符号信息的文件<br>.dSYM/Contents/Resources/DWARF/xx（常用于分析APP的崩溃信息）</p>
+</li>
+</ul>
+<h2><span id="10mach-o的基本结构">10.Mach-O的基本结构</span></h2><ul>
+<li><p>官方描述<br><a href="https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/MachOTopics/0-Introduction/introduction.html" target="_blank" rel="noopener">https://developer.apple.com/library/content/documentation/DeveloperTools/Conceptual/MachOTopics/0-Introduction/introduction.html</a></p>
+</li>
+<li><p>一个Mach-O文件包含3个主要区域<br>1&gt; <strong>Header </strong><br>文件类型、目标架构类型等<br>2&gt; <strong>Load commands</strong><br>描述文件在虚拟内存中的逻辑结构、布局<br>3&gt; <strong>Raw segment data</strong><br>在Load commands中定义的Segment的原始数据</p>
+</li>
+</ul>
+<p><img src="/2018/11/04/6.Mach-O/Mach-O结构.png" alt="Mach-O结构"></p>
+<h2><span id="11窥探mach-o的结构">11.窥探Mach-O的结构</span></h2><p><strong>命令行工具：</strong></p>
+<ul>
+<li>file：查看Mach-O的文件类型<br><strong>file  文件路径</strong></li>
+<li>otool：查看Mach-O特定部分和段的内容</li>
+<li>lipo：常用于多架构Mach-O文件的处理<br>1&gt; 查看架构信息：<strong>lipo  -info  文件路径</strong><br>2&gt; 导出某种特定架构：lipo  文件路径  -thin  架构类型  -output  输出文件路径<br>3&gt; 合并多种架构：lipo  文件路径1  文件路径2  -output  输出文件路径</li>
+</ul>
+<p><strong>GUI工具</strong><br>MachOView: <a href="https://github.com/gdbinit/MachOView" target="_blank" rel="noopener">https://github.com/gdbinit/MachOView </a></p>
+<h2><span id="12universal-binary通用二进制文件">12.Universal Binary（通用二进制文件）</span></h2><ul>
+<li><p>通用二进制文件<br>1&gt; 同时适用于多种架构的二进制文件<br>2&gt; 包含了多种不同架构的独立的二进制文件</p>
+</li>
+<li><p>因为需要储存多种架构的代码，通用二进制文件通常比单一平台二进制的程序要大</p>
+</li>
+<li><p>由于两种架构有共同的一些资源，所以并不会达到单一版本的两倍之多</p>
+</li>
+<li><p>由于执行过程中，只调用一部分代码，运行起来也不需要额外的内存</p>
+</li>
+<li><p>因为文件比原来的要大，也被称为“胖二进制文件”（Fat Binary）</p>
+</li>
+</ul>
+<h2><span id="13dyld和mach-o">13.dyld和Mach-O</span></h2><ul>
+<li><p>dyld用于加载以下类型的Mach-O文件<br>1&gt; MH_EXECUTE<br>2&gt; MH_DYLIB<br>3&gt; MH_BUNDLE</p>
+</li>
+<li><p>APP的可执行文件、动态库都是由dyld负责加载的</p>
+</li>
+</ul>
 
       
     </div>
@@ -450,7 +551,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/KVC/" rel="tag"># KVC</a>
+            <a href="/tags/逆向实战/" rel="tag"># 逆向实战</a>
+          
+            <a href="/tags/SSH/" rel="tag"># SSH</a>
           
         </div>
       
@@ -463,8 +566,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/06/iOS中的线程同步方案-锁/" rel="next" title="iOS中的线程同步方案（锁）、读写安全方案">
-                <i class="fa fa-chevron-left"></i> iOS中的线程同步方案（锁）、读写安全方案
+              <a href="/2018/11/03/5.Reveal_/" rel="next" title="Reveal">
+                <i class="fa fa-chevron-left"></i> Reveal
               </a>
             
           </div>
@@ -472,10 +575,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/18/Category/" rel="prev" title="Category">
-                Category <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -660,7 +759,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">1.KVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">2.通过KVC修改属性会触发KVO么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">3.setValue:forKey</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">4.valueForKey</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">1.APP从开发到安装到手机的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">2.逆向APP的思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">3.class-dump</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">4.代码的编译过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">5.Hopper Disassmbler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">6.动态库共享缓存（dyld shared cache）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">7.动态库的加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">8.从动态库共享缓存抽取动态库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">9.Mach-O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">10.Mach-O的基本结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">11.窥探Mach-O的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">12.Universal Binary（通用二进制文件）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-text">13.dyld和Mach-O</span></a></li></ol></div>
             
 
           </div>

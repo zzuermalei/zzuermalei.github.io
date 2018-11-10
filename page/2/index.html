@@ -11,10 +11,8 @@
 
 
 
-  
 
-
-<html class="theme-next muse use-motion" lang="zh-CN">
+<html class="theme-next muse" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -91,7 +89,7 @@
     fastclick: false,
     lazyload: false,
     tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -292,6 +290,242 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/iOS中的线程同步方案-锁/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小马同学">
+      <meta itemprop="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小马同学的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/06/iOS中的线程同步方案-锁/" itemprop="url">
+                  iOS中的线程同步方案（锁）、读写安全方案
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-06 08:42:11" itemprop="dateCreated datePublished" datetime="2018-09-06T08:42:11+08:00">2018-09-06</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-11 23:15:30" itemprop="dateModified" datetime="2018-09-11T23:15:30+08:00">2018-09-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1><span id="ios中的线程同步方案">iOS中的线程同步方案</span></h1><ul>
+<li>OSSpinLock</li>
+<li>os_unfair_lock</li>
+<li>pthread_mutex</li>
+<li>dispatch_semaphore</li>
+<li>dispatch_queue(DISPATCH_QUEUE_SERIAL)</li>
+<li>NSLock</li>
+<li>NSRecursiveLock</li>
+<li>NSCondition</li>
+<li>NSConditionLock</li>
+<li>@synchronized</li>
+</ul>
+<h1><span id="1osspinlock">1.OSSpinLock</span></h1><p>1&gt; OSSpinLock叫做“自旋锁”，等待锁的线程会处于忙等（busy-wait）状态，一直占用着CPU资源；High-level lock，高级锁，等不到锁时忙等，不会休眠<br>2&gt; 目前已经不再安全，可能会出现优先级反转问题<br>3&gt; 如果等待锁的优先级较高，它会一直占用着CPU资源，优先级低的线程就无法释放锁<br>4&gt; 需要导入头文件 #import <strong>&lt;libkern/OSAtomic.h&gt;</strong></p>
+<p><strong>自旋锁优先级反转：</strong>有两个线程，thread1（高优先级）、thread2（低优先级），thread2先进行加锁操作，CPU切换调度，thread1进入，发现已经被锁，进入自旋状态。由于thread1优先级比thread2高出很多，CPU接下来可能一直调度thread1，处于自旋状态，相当于一直执行不到thread2的解锁操作，造成优先级反转现象</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">OSSpinLock lock = OS_SPINLOCK_INIT;</span><br><span class="line"><span class="comment">// 尝试加锁（如果需要等待就不加锁，直接返回false；如果不需要等待就加锁，返回true）</span></span><br><span class="line"><span class="comment">// 加锁</span></span><br><span class="line">OSSpinLockLock(&amp;lock);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">OSSpinLockUnlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+<p>OSSpinLock是性能最高的锁，因为加锁操作耗时较短的话，忙等一会儿直接继续执行了；反之休眠的话唤醒也是需要耗性能的。但是现在已经不再安全了，所以苹果不建议我们再继续使用OSSpinLock了</p>
+<p>验证<strong>OSSpinLock自旋锁忙等</strong>：<br>Xcode -&gt; Debug Workflow -&gt; Always show Disassembly</p>
+<p>step:：代码级别一行一行走<br>stepi：汇编指令一行一行走，简称 si<br>nexti：汇编指令一行一行走，但是如果遇到函数调用不会进去，会直接跳过</p>
+<p>我们通过 si 指令，一行一行走，进入 OSSpinLockLock 函数，继续，进入 _OSSpinLockLockSlow 函数，这个时候要注意了：会一直在一块儿内存地址代码之间重复执行，这种就是典型的while循环，自旋锁，只有锁被放开之后才会往下继续执行</p>
+<h1><span id="2os_unfair_lock_lock">2.os_unfair_lock_lock</span></h1><p>1&gt; os_unfair_lock用于取代不安全的OSSpinLock，从iOS10开始支持<br>2&gt; 从底层调用看，等待os_unfair_lock锁的线程会处于休眠状态，并非忙等；Low-level lock,低级锁，等不到锁时休眠<br>3&gt; 需要导入头文件 #import <strong>&lt;os/lock.h&gt;</strong></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化</span></span><br><span class="line">os_unfair_lock lock = OS_UNFAIR_LOCK_INIT;</span><br><span class="line"><span class="comment">// 尝试加锁</span></span><br><span class="line">os_unfair_lock_trylock(&amp;lock);</span><br><span class="line"><span class="comment">// 加锁</span></span><br><span class="line">os_unfair_lock_lock(&amp;lock);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">os_unfair_lock_unlock(&amp;lock);</span><br></pre></td></tr></table></figure>
+<p>验证 <strong>os_unfair_lock_lock 非忙等</strong>：<br>os_unfair_lock_lock -&gt; _os_unfair_lock_lock_slow -&gt; __ulock_wait，进入之后，发现断点过着过着、到syscall时直接过去了，直接休眠了，这也说明os_unfair_lock_lock线程等待时并非忙等，而是休眠了</p>
+<h1><span id="3-pthread_mutex">3. pthread_mutex</span></h1><p>1&gt; mutex叫做“互斥锁”，等待锁的线程会处于休眠状态<br>2&gt; 需导入头文件 #import <strong>&lt;pthread.h&gt;</strong><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* Mutex type attributes</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// 普通锁</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_NORMAL        0</span></span><br><span class="line"><span class="comment">// 检查错误的</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_ERRORCHECK    1</span></span><br><span class="line"><span class="comment">// 递归锁</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_RECURSIVE        2</span></span><br><span class="line"><span class="meta">#define PTHREAD_MUTEX_DEFAULT        PTHREAD_MUTEX_NORMAL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化锁的属性</span></span><br><span class="line">pthread_mutexattr_t attr;</span><br><span class="line">pthread_mutexattr_init(&amp;attr);</span><br><span class="line">pthread_mutexattr_settype(&amp;attr, PTHREAD_MUTEX_NORMAL)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_mutex_t mutex;</span><br><span class="line">pthread_mutex_init(&amp;mutex, &amp;attr);</span><br><span class="line"><span class="comment">// 尝试加锁</span></span><br><span class="line">pthread_mutex_trylock(&amp;mutex);</span><br><span class="line"><span class="comment">// 加锁</span></span><br><span class="line">pthread_mutex_lock(&amp;mutex);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">pthread_mutex_unlock(&amp;mutex);</span><br><span class="line"><span class="comment">// 销毁相关资源</span></span><br><span class="line">pthread_mutexattr_destroy(&amp;attr);</span><br><span class="line">pthread_mutex_destroy(&amp;mutex);</span><br></pre></td></tr></table></figure></p>
+<p>将属性attr的type由PTHREAD_MUTEX_NORMAL改为 PTHREAD_MUTEX_RECURSIVE，这个锁就变成了递归锁：允许 <strong>同一个线程</strong> 对 <strong>同一把锁</strong> 进行 <strong>重复加锁</strong></p>
+<h1><span id="4pthread_mutex-递归锁">4.pthread_mutex - 递归锁</span></h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pthread_mutexattr_t attr;</span><br><span class="line">pthread_mutexattr_init(&amp;attr);</span><br><span class="line">pthread_mutexattr_settype(&amp;attr, PTHREAD_MUTEX_RECURSIVE)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_mutex_t mutex;</span><br><span class="line">pthread_mutex_init(&amp;mutex, &amp;attr);</span><br></pre></td></tr></table></figure>
+<h1><span id="5pthread_mutex-条件">5.pthread_mutex - 条件</span></h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_mutex_t mutex;</span><br><span class="line"><span class="comment">// NULL代表使用默认属性</span></span><br><span class="line">pthread_mutex_init(&amp;mutex, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">// 初始化条件</span></span><br><span class="line">pthread_cond_t condition;</span><br><span class="line">pthread_cond_init(&amp;condition, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">// 等待条件（进入休眠，放开mutex锁；被唤醒后，会再次对mutex加锁）</span></span><br><span class="line">pthread_cond_wait(&amp;condition, &amp;mutex);</span><br><span class="line"><span class="comment">// 激活一个等待该条件的线程</span></span><br><span class="line">pthread_cond_signal(&amp;condition);</span><br><span class="line"><span class="comment">// 激活所有等待该条件的线程</span></span><br><span class="line">pthread_cond_broadcast(&amp;condition);</span><br><span class="line"><span class="comment">// 销毁资源</span></span><br><span class="line">pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">pthread_cond_destroy(&amp;condition);</span><br></pre></td></tr></table></figure>
+<h1><span id="6nslock-nsrecurisivelock">6.NSLock、NSRecurisiveLock</span></h1><p>1&gt; NSLock 是对mutex普通锁的封装<br>2&gt; NSRecursiveLock 也是对mutex递归锁的封装，API跟NSLock基本一致<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">NSLocking</span></span></span><br><span class="line">- (<span class="keyword">void</span>)lock;</span><br><span class="line">- (<span class="keyword">void</span>)unlock;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSLock</span> : <span class="title">NSObject</span> &lt;<span class="title">NSLocking</span>&gt;</span></span><br><span class="line">- (<span class="built_in">BOOL</span>)tryLock;</span><br><span class="line">- (<span class="built_in">BOOL</span>)lockBeforeDate:(<span class="built_in">NSDate</span> *)limit;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure></p>
+<p>NSLock 是OC对象，再从堆栈一行一行找的话不好看锁的执行流程，因为OC对象通过消息机制执行方法，堆栈里面有很多消息机制流程，对汇编不是很熟悉的话不好断点。</p>
+<p>那我们就放弃了么，NO，NO，还是可以通过 <strong><a href="http://ftpmain.gnustep.org/pub/gnustep/core/gnustep-base-1.25.0.tar.gz" target="_blank" rel="noopener">GUNStep -&gt; GNUstep Base</a></strong> 来参考下</p>
+<p>GNUstep是GNU计划的项目之一，它将Cocoa的OC库重新开源实现了一遍，虽然GNUstep不是苹果官方源码，但还是具有一定的参考价值</p>
+<p>源码地址：<a href="http://www.gnustep.org/resources/downloads.php" target="_blank" rel="noopener">http://www.gnustep.org/resources/downloads.php</a></p>
+<p>下载之后打开工程，搜索 <strong>NSLock.m</strong>，找到 <strong>initialize</strong> 方法：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">+ (<span class="keyword">void</span>) initialize</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="built_in">BOOL</span>    beenHere = <span class="literal">NO</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (beenHere == <span class="literal">NO</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        beenHere = <span class="literal">YES</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Initialise attributes for the different types of mutex.</span></span><br><span class="line"><span class="comment">        * We do it once, since attributes can be shared between multiple</span></span><br><span class="line"><span class="comment">        * mutexes.</span></span><br><span class="line"><span class="comment">        * If we had a pthread_mutexattr_t instance for each mutex, we would</span></span><br><span class="line"><span class="comment">        * either have to store it as an ivar of our NSLock (or similar), or</span></span><br><span class="line"><span class="comment">        * we would potentially leak instances as we couldn't destroy them</span></span><br><span class="line"><span class="comment">        * when destroying the NSLock.  I don't know if any implementation</span></span><br><span class="line"><span class="comment">        * of pthreads actually allocates memory when you call the</span></span><br><span class="line"><span class="comment">        * pthread_mutexattr_init function, but they are allowed to do so</span></span><br><span class="line"><span class="comment">        * (and deallocate the memory in pthread_mutexattr_destroy).</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        pthread_mutexattr_init(&amp;attr_normal);</span><br><span class="line">        pthread_mutexattr_settype(&amp;attr_normal, PTHREAD_MUTEX_NORMAL);</span><br><span class="line">        pthread_mutexattr_init(&amp;attr_reporting);</span><br><span class="line">        pthread_mutexattr_settype(&amp;attr_reporting, PTHREAD_MUTEX_ERRORCHECK);</span><br><span class="line">        pthread_mutexattr_init(&amp;attr_recursive);</span><br><span class="line">        pthread_mutexattr_settype(&amp;attr_recursive, PTHREAD_MUTEX_RECURSIVE);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* To emulate OSX behavior, we need to be able both to detect deadlocks</span></span><br><span class="line"><span class="comment">        * (so we can log them), and also hang the thread when one occurs.</span></span><br><span class="line"><span class="comment">        * the simple way to do that is to set up a locked mutex we can</span></span><br><span class="line"><span class="comment">        * force a deadlock on.</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        pthread_mutex_init(&amp;deadlock, &amp;attr_normal);</span><br><span class="line">        pthread_mutex_lock(&amp;deadlock);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们发现，其实就是 <strong>pthread_mutex_init(&amp;deadlock, &amp;attr_normal);</strong>，所以 NSLock 其实就是对 pthread_mutex 普通锁的封装</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NSRecursiveLock</span></span><br><span class="line">- (<span class="keyword">id</span>) init</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != (<span class="keyword">self</span> = [<span class="keyword">super</span> init]))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != pthread_mutex_init(&amp;_mutex, &amp;attr_recursive))</span><br><span class="line">        &#123;</span><br><span class="line">            DESTROY(<span class="keyword">self</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1><span id="7nscondition">7.NSCondition</span></h1><p>1&gt; NSCondition是对mutex和cond的封装<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSCondition</span> : <span class="title">NSObject</span> &lt;<span class="title">NSLocking</span>&gt; </span>&#123;</span><br><span class="line">- (<span class="keyword">void</span>)wait;</span><br><span class="line">- (<span class="built_in">BOOL</span>)waitUntilDate:(<span class="built_in">NSDate</span> *)limit;</span><br><span class="line">- (<span class="keyword">void</span>)signal;</span><br><span class="line">- (<span class="keyword">void</span>)broadcast;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure></p>
+<p>GNUStep实现如下：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>) init</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != (<span class="keyword">self</span> = [<span class="keyword">super</span> init]))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="number">0</span> != pthread_cond_init(&amp;_condition, <span class="literal">NULL</span>))</span><br><span class="line">        &#123;</span><br><span class="line">            DESTROY(<span class="keyword">self</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (<span class="number">0</span> != pthread_mutex_init(&amp;_mutex, &amp;attr_reporting))</span><br><span class="line">        &#123;</span><br><span class="line">            pthread_cond_destroy(&amp;_condition);</span><br><span class="line">            DESTROY(<span class="keyword">self</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>) signal</span><br><span class="line">&#123;</span><br><span class="line">    pthread_cond_signal(&amp;_condition);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>) wait</span><br><span class="line">&#123;</span><br><span class="line">    pthread_cond_wait(&amp;_condition, &amp;_mutex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1><span id="8nsconditionlock">8.NSConditionLock</span></h1><p>1&gt; NSConditionLock是对NSCondition的进一步封装，可以设置具体的条件值<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSConditionLock</span> : <span class="title">NSObject</span> &lt;<span class="title">NSLocking</span>&gt; </span>&#123;</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithCondition:(<span class="built_in">NSInteger</span>)condition <span class="built_in">NS_DESIGNATED_INITIALIZER</span>;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">readonly</span>) <span class="built_in">NSInteger</span> condition;</span><br><span class="line">- (<span class="keyword">void</span>)lockWhenCondition:(<span class="built_in">NSInteger</span>)condition;</span><br><span class="line">- (<span class="built_in">BOOL</span>)tryLock;</span><br><span class="line">- (<span class="built_in">BOOL</span>)tryLockWhenCondition:(<span class="built_in">NSInteger</span>)condition;</span><br><span class="line">- (<span class="keyword">void</span>)unlockWithCondition:(<span class="built_in">NSInteger</span>)condition;</span><br><span class="line">- (<span class="built_in">BOOL</span>)lockBeforeDate:(<span class="built_in">NSDate</span> *)limit;</span><br><span class="line">- (<span class="built_in">BOOL</span>)lockWhenCondition:(<span class="built_in">NSInteger</span>)condition beforeDate:(<span class="built_in">NSDate</span> *)limit;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure></p>
+<p>GUNStep：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">id</span>) init</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> [<span class="keyword">self</span> initWithCondition: <span class="number">0</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">id</span>) initWithCondition: (<span class="built_in">NSInteger</span>)value</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="literal">nil</span> != (<span class="keyword">self</span> = [<span class="keyword">super</span> init]))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">nil</span> == (_condition = [<span class="built_in">NSCondition</span> new]))</span><br><span class="line">        &#123;</span><br><span class="line">            DESTROY(<span class="keyword">self</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            _condition_value = value;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1><span id="9dispatch_queuedispatch_queue_serial-gcd串行队列">9.dispatch_queue(DISPATCH_QUEUE_SERIAL) GCD串行队列</span></h1><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_queue_create(<span class="string">"top.istones.moneyQueue"</span>, DISPATCH_QUEUE_SERIAL);</span><br><span class="line"><span class="built_in">dispatch_sync</span>(<span class="keyword">self</span>.moneyQueue, ^&#123;</span><br><span class="line">    <span class="comment">// 任务</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h1><span id="10dispatch_semaphore">10.dispatch_semaphore</span></h1><p>1&gt; semaphore叫做”信号量”<br>2&gt; 信号量的初始值，可以用来控制线程并发访问的最大数量<br>3&gt; 信号量的初始值为1，代表同时只允许1条线程访问资源，保证线程同步</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 信号量的初始值</span></span><br><span class="line"><span class="keyword">int</span> value = <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 初始化信号量</span></span><br><span class="line">dispatch_semaphore_t semaphore = dispatch_semaphore_create(value);</span><br><span class="line"><span class="comment">// 如果信号量的值 &lt;= 0，当前线程进入休眠等待（直到信号量的值 &gt; 0）</span></span><br><span class="line"><span class="comment">// 如果信号量的值 &gt; 0，就减1，然后往下执行后面的代码</span></span><br><span class="line">dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</span><br><span class="line"><span class="comment">// 信号量的值加1</span></span><br><span class="line">dispatch_semaphore_signal(semaphore);</span><br></pre></td></tr></table></figure>
+<h1><span id="11synchronized">11.@synchronized</span></h1><p>1&gt; @synchronized是对mutex递归锁的封装<br>2&gt; 源码查看：<strong>objc4</strong>中的<strong>objc-sync.mm</strong>文件<br>3&gt; @synchronized(obj)内部会生成obj对应的递归锁，然后进行加锁、解锁操作</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@synchronized</span>(obj) &#123; <span class="comment">// objc_sync_enter</span></span><br><span class="line">    <span class="comment">// 任务</span></span><br><span class="line">&#125; <span class="comment">// objc_sync_exit</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>效率非常低，苹果已经不推荐使用，Xcode也没有提示了</p>
+<p>Xcode断点，发现，@synchronized在大括号进入和退出时分别调用的是 objc_sync_enter 和 objc_sync_exit。在 objc-sync.mm 文件中搜索：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Begin synchronizing on 'obj'. </span></span><br><span class="line"><span class="comment">// Allocates recursive mutex associated with 'obj' if needed.</span></span><br><span class="line"><span class="comment">// Returns OBJC_SYNC_SUCCESS once lock is acquired.  </span></span><br><span class="line"><span class="keyword">int</span> objc_sync_enter(<span class="keyword">id</span> obj)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> result = OBJC_SYNC_SUCCESS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (obj) &#123;</span><br><span class="line">        SyncData* data = id2data(obj, ACQUIRE);</span><br><span class="line">        assert(data);</span><br><span class="line">        data-&gt;mutex.lock();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// @synchronized(nil) does nothing</span></span><br><span class="line">        <span class="keyword">if</span> (DebugNilSync) &#123;</span><br><span class="line">            _objc_inform(<span class="string">"NIL SYNC DEBUG: @synchronized(nil); set a breakpoint on objc_sync_nil to debug"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        objc_sync_nil();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// End synchronizing on 'obj'. </span></span><br><span class="line"><span class="comment">// Returns OBJC_SYNC_SUCCESS or OBJC_SYNC_NOT_OWNING_THREAD_ERROR</span></span><br><span class="line"><span class="keyword">int</span> objc_sync_exit(<span class="keyword">id</span> obj)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> result = OBJC_SYNC_SUCCESS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (obj) &#123;</span><br><span class="line">        SyncData* data = id2data(obj, RELEASE); </span><br><span class="line">        <span class="keyword">if</span> (!data) &#123;</span><br><span class="line">            result = OBJC_SYNC_NOT_OWNING_THREAD_ERROR;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">bool</span> okay = data-&gt;mutex.tryUnlock();</span><br><span class="line">            <span class="keyword">if</span> (!okay) &#123;</span><br><span class="line">                result = OBJC_SYNC_NOT_OWNING_THREAD_ERROR;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// @synchronized(nil) does nothing</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1><span id="性能">性能</span></h1><p>性能由高到低：<br>1&gt; os_unfair_lock<br>2&gt; OSSpinLock<br>3&gt; dispatch_semaphore<br>4&gt; pthread_mutex<br>5&gt; dispatch_queue(DISPATCH_QUEUE_SERIAL)<br>6&gt; NSLock<br>7&gt; NSCondition<br>8&gt; pthread_mutex(recursive)<br>9&gt; NSRecursiveLock<br>10&gt; NSConditionLock<br>11&gt; @synchronized</p>
+<p>推荐使用 dispatch_semaphore、pthread_mutex，os_unfair_lock 性能虽然高，但是从 iOS10 才开始支持</p>
+<h1><span id="什么情况下使用自旋锁比较划算">什么情况下使用自旋锁比较划算</span></h1><p>1&gt; 预计线程等待锁的时间很短<br>2&gt; 加锁的代码（临界区）经常被调用，但竞争很少发生<br>3&gt; CPU 资源不紧张<br>4&gt; 多核处理器</p>
+<h1><span id="什么情况下使用互斥锁比较划算">什么情况下使用互斥锁比较划算</span></h1><p>1&gt; 预计线程等待锁的时间较长<br>2&gt; 单核处理器<br>3&gt; 临界区有IO操作<br>4&gt; 临界区代码复杂或者循环量大<br>5&gt; 临界区竞争非常激烈</p>
+<hr>
+<h1><span id="atomic">atomic</span></h1><p>1&gt; atomic用于保证属性setter、getter的原子性操作，相当于在getter和setter内部加了线程同步的锁<br>2&gt; 可以参考源码 <strong>objc4</strong> 的 <strong>objc-accessors.mm</strong><br>3&gt; 它并不能保证使用属性的过程是线程安全的（eg.一个属性array，atomic的话只能保证在外面set和get的时候线程安全，但是不能保证array addObject、removeObject线程安全）</p>
+<p>提到 atomic，我们想到更多的是 nonatomic，atomic 原子性，在 macOS 中有用，在 iOS 项目中几乎不会用</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">nonatomic 和 atomic</span></span><br><span class="line"><span class="comment">atom：原子</span></span><br><span class="line"><span class="comment">atomic：原子性</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">给属性加上atomic属性修饰，可以保证属性的setter和getter都是原子性操作，也就是保证setter和getter内部都是线程同步的，相当于下面：</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- (void)setName:(NSString *)name &#123;</span></span><br><span class="line"><span class="comment">    // 加锁</span></span><br><span class="line"><span class="comment">    _name = name;</span></span><br><span class="line"><span class="comment">    // 加锁</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">- (NSString *)name &#123;</span></span><br><span class="line"><span class="comment">    // 加锁</span></span><br><span class="line"><span class="comment">    // 取值</span></span><br><span class="line"><span class="comment">    // 解锁</span></span><br><span class="line"><span class="comment">    // 返回</span></span><br><span class="line"><span class="comment">    return _name;</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<p>打开objc4源码，搜索 <strong>objc-accessors.mm</strong> 文件，观察 reallySetProperty 和 objc_getProperty 方法：</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="keyword">void</span> reallySetProperty(<span class="keyword">id</span> <span class="keyword">self</span>, SEL _cmd, <span class="keyword">id</span> newValue, ptrdiff_t offset, <span class="keyword">bool</span> atomic, <span class="keyword">bool</span> <span class="keyword">copy</span>, <span class="keyword">bool</span> mutableCopy)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (offset == <span class="number">0</span>) &#123;</span><br><span class="line">        object_setClass(<span class="keyword">self</span>, newValue);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">id</span> oldValue;</span><br><span class="line">    <span class="keyword">id</span> *slot = (<span class="keyword">id</span>*) ((<span class="keyword">char</span>*)<span class="keyword">self</span> + offset);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">copy</span>) &#123;</span><br><span class="line">        newValue = [newValue copyWithZone:<span class="literal">nil</span>];</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (mutableCopy) &#123;</span><br><span class="line">        newValue = [newValue mutableCopyWithZone:<span class="literal">nil</span>];</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (*slot == newValue) <span class="keyword">return</span>;</span><br><span class="line">        newValue = objc_retain(newValue);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!atomic) &#123;</span><br><span class="line">        oldValue = *slot;</span><br><span class="line">        *slot = newValue;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        spinlock_t&amp; slotlock = PropertyLocks[slot];</span><br><span class="line">        slotlock.lock();</span><br><span class="line">        oldValue = *slot;</span><br><span class="line">        *slot = newValue;        </span><br><span class="line">        slotlock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    objc_release(oldValue);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">id</span> objc_getProperty(<span class="keyword">id</span> <span class="keyword">self</span>, SEL _cmd, ptrdiff_t offset, <span class="built_in">BOOL</span> atomic) &#123;</span><br><span class="line">    <span class="keyword">if</span> (offset == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> object_getClass(<span class="keyword">self</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Retain release world</span></span><br><span class="line">    <span class="keyword">id</span> *slot = (<span class="keyword">id</span>*) ((<span class="keyword">char</span>*)<span class="keyword">self</span> + offset);</span><br><span class="line">    <span class="keyword">if</span> (!atomic) <span class="keyword">return</span> *slot;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Atomic retain release world</span></span><br><span class="line">    spinlock_t&amp; slotlock = PropertyLocks[slot];</span><br><span class="line">    slotlock.lock();</span><br><span class="line">    <span class="keyword">id</span> value = objc_retain(*slot);</span><br><span class="line">    slotlock.unlock();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// for performance, we (safely) issue the autorelease OUTSIDE of the spinlock.</span></span><br><span class="line">    <span class="keyword">return</span> objc_autoreleaseReturnValue(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以发现，如果是atomic，就加了一把<strong>自旋锁</strong>，如果是nonatomic，直接set或返回值</p>
+<hr>
+<h1><span id="ios中的读写安全方案">iOS中的读写安全方案</span></h1><p>我们先思考如何实现以下场景：<br>1&gt; 同一时间，只能有1个线程进行写的操作<br>2&gt; 同一时间，允许有多个线程进行读的操作<br>3&gt; 同一时间，不允许既有写的操作，又有读的操作</p>
+<p>上面的场景就是典型的“多读单写”，经常用于文件等数据的读写操作</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)test &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">NSInteger</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">        [[[<span class="built_in">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(read) object:<span class="literal">nil</span>] start];</span><br><span class="line">        [[[<span class="built_in">NSThread</span> alloc] initWithTarget:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(write) object:<span class="literal">nil</span>] start];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#pragma mark - private methods</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">如果读也加上 semaphore 的话，确实可以保证读写都安全，同时只能读或者写，但是没必要。iOS中读写方案一般设计多读单写，读不涉及资源抢占，可以同时进行。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">但是，这样依然存在问题，虽然可以多读单写。但是写入加锁了，读却没有加锁，读的同时依然可以写，这个依然不可控，依然不安全，不能保证读的同时没有线程在进行写的操作。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">- (<span class="keyword">void</span>)read &#123;</span><br><span class="line"><span class="comment">//    dispatch_semaphore_wait(self.semphore, DISPATCH_TIME_FOREVER);</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%s"</span>, __func__);</span><br><span class="line"></span><br><span class="line"><span class="comment">//    dispatch_semaphore_signal(self.semphore);</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="keyword">void</span>)write &#123;</span><br><span class="line">    dispatch_semaphore_wait(<span class="keyword">self</span>.semphore, DISPATCH_TIME_FOREVER);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%s"</span>, __func__);</span><br><span class="line"></span><br><span class="line">    dispatch_semaphore_signal(<span class="keyword">self</span>.semphore);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好像简单这样用semphore的话并不能实现安全多读单写，那么怎么实现呢？</p>
+<p>iOS中的实现方案有：<br>1&gt; pthread_rwlock：读写锁<br>2&gt; dispatch_barrier_async：异步栅栏调用</p>
+<h4><span id="pthread_rwlock">pthread_rwlock</span></h4><p>等待锁的线程会进入休眠<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化锁</span></span><br><span class="line">pthread_rwlock_t lock;</span><br><span class="line">pthread_rwlock_init(&amp;lock, <span class="literal">NULL</span>);</span><br><span class="line"><span class="comment">// 读-加锁</span></span><br><span class="line">pthread_rwlock_rdlock(&amp;lock);</span><br><span class="line"><span class="comment">// 读-尝试加锁</span></span><br><span class="line">pthread_rwlock_tryrdlock(&amp;lock);</span><br><span class="line"><span class="comment">// 写-加锁</span></span><br><span class="line">pthread_rwlock_wrlock(&amp;lock);</span><br><span class="line"><span class="comment">// 写-尝试加锁</span></span><br><span class="line">pthread_rwlock_trywrlock(&amp;lock);</span><br><span class="line"><span class="comment">// 解锁</span></span><br><span class="line">pthread_rwlock_unlock(&amp;lock);</span><br><span class="line"><span class="comment">// 销毁</span></span><br><span class="line">pthread_rwlock_destroy(&amp;lock);</span><br></pre></td></tr></table></figure></p>
+<h4><span id="dispatch_barrier_async">dispatch_barrier_async</span></h4><p>1&gt; 这个函数传入的并发队列必须是自己通过dispatch_queue_cretate创建的<br>2&gt; 如果传入的是一个串行或是一个全局的并发队列，那这个函数便等同于dispatch_async函数的效果</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dispatch_queue_t</span> queue = dispatch_queue_create(<span class="string">"top.istones.rwQueue"</span>, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读</span></span><br><span class="line"><span class="built_in">dispatch_async</span>(queue, ^&#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 写</span></span><br><span class="line">dispatch_barrier_async(queue, ^&#123;</span><br><span class="line"></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>读和写一定要放到一个队列里面！</p>
+<p><a href="/download/线程同步方案/线程同步方案.zip"><strong>本文demo</strong></a><br><a href="/download/1.OC对象的本质/objc4-723.tar.gz"><strong>objc4</strong></a><br><a href="/download/线程同步方案/gnustep-base-1.25.0.zip"><strong>GNUstep Base</strong></a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -1293,7 +1527,7 @@
 <h2><span id="欢迎交流指点并提出宝贵意见">欢迎交流指点并提出宝贵意见</span></h2><ul>
 <li>Github：<a href="https://github.com/iStonesy" target="_blank" rel="noopener">@小马同学的Github</a></li>
 <li>简书：<a href="https://www.jianshu.com/u/03a336dff0ec" target="_blank" rel="noopener">@小马同学的简书</a></li>
-<li>邮箱：<a href="mailto:&#122;&#x7a;&#x75;&#109;&#x61;&#108;&#x65;&#x69;&#x40;&#49;&#54;&#51;&#x2e;&#99;&#111;&#x6d;" target="_blank" rel="noopener">&#122;&#x7a;&#x75;&#109;&#x61;&#108;&#x65;&#x69;&#x40;&#49;&#54;&#51;&#x2e;&#99;&#111;&#x6d;</a></li>
+<li>邮箱：<a href="mailto:&#122;&#122;&#117;&#x6d;&#97;&#x6c;&#x65;&#105;&#x40;&#x31;&#x36;&#51;&#46;&#x63;&#111;&#x6d;" target="_blank" rel="noopener">&#122;&#122;&#117;&#x6d;&#97;&#x6c;&#x65;&#105;&#x40;&#x31;&#x36;&#51;&#46;&#x63;&#111;&#x6d;</a></li>
 <li>QQ：492843636</li>
 </ul>
 
@@ -1385,7 +1619,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-count">16</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1502,7 +1736,7 @@
       <div class="footer-inner">
         <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
+    <i class="fa fa-snowflake-o"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">小马同学</span>
 
@@ -1514,17 +1748,21 @@
 
 
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
 
-
-
-  <span class="post-meta-divider">|</span>
 
 
 
   <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Muse</a> v6.4.0</div>
 
 
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+<span class="post-meta-divider">|</span>
+<span id="busuanzi_container_site_uv">总访客<span id="busuanzi_value_site_uv"></span>人</span>
+<span class="post-meta-divider">|</span>
 
 
         
