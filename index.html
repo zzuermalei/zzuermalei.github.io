@@ -306,6 +306,227 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/25/7.加壳脱壳/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小马同学">
+      <meta itemprop="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小马同学的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/25/7.加壳脱壳/" itemprop="url">
+                  加壳脱壳
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-25 04:04:33 / 修改时间：05:10:23" itemprop="dateCreated datePublished" datetime="2018-11-25T04:04:33+08:00">2018-11-25</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/逆向实战/" itemprop="url" rel="index"><span itemprop="name">逆向实战</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>iOS | 加壳脱壳 | Objective-C</p>
+<h2><span id="1加壳">1.加壳</span></h2><p><img src="/2018/11/25/7.加壳脱壳/加壳_1.png" alt="加壳_1"></p>
+<hr>
+<p><strong>什么是加壳 ?</strong><br>利用特殊的算法，对可执行文件的编码进行改变（比如压缩、加密），以达到保护程序代码的目的<br><img src="/2018/11/25/7.加壳脱壳/加壳_2.png" alt="加壳_2"></p>
+<h2><span id="2-脱壳">2. 脱壳</span></h2><ul>
+<li><p>什么是脱壳？<br>摘掉壳程序，将未加密的可执行文件还原出来（有些人也称为“砸壳”）</p>
+</li>
+<li><p>脱壳主要有2种方法：硬脱壳、动态脱壳<br><img src="/2018/11/25/7.加壳脱壳/脱壳.png" alt="脱壳"></p>
+</li>
+</ul>
+<h2><span id="3ios中的脱壳工具">3.iOS中的脱壳工具</span></h2><ul>
+<li>iOS中有很多好用的脱壳工具<ul>
+<li>Clutch：<a href="https://github.com/KJCracks/Clutch" target="_blank" rel="noopener">https://github.com/KJCracks/Clutch</a></li>
+<li>dumpdecrypted: <a href="https://github.com/stefanesser/dumpdecrypted/" target="_blank" rel="noopener">https://github.com/stefanesser/dumpdecrypted/</a></li>
+<li>AppCrackr、Crackulous</li>
+</ul>
+</li>
+</ul>
+<h2><span id="4-如何验证可执行文件是否已经脱壳">4. 如何验证可执行文件是否已经脱壳？</span></h2><ul>
+<li><p>查看Load Commands -&gt; LC_ENCRYPTION_INFO -&gt; Crypt ID的值，<strong>0</strong> 代表 <strong>未加密</strong><br><img src="/2018/11/25/7.加壳脱壳/验证是否脱壳.png" alt="验证是否脱壳"></p>
+</li>
+<li><p>通过otool命令行也可以：<strong>otool   -l   可执行文件路径   |   grep   crypt</strong> </p>
+</li>
+</ul>
+<h2><span id="5clutch-配置">5.Clutch - 配置</span></h2><ul>
+<li><p>下载最新的Release版： <a href="https://github.com/KJCracks/Clutch/releases" target="_blank" rel="noopener">https://github.com/KJCracks/Clutch/releases</a><br><img src="/2018/11/25/7.加壳脱壳/Clutch_1.png" alt="Clutch_1"></p>
+</li>
+<li><p>建议去掉版本号，改名为Clutch<br><img src="/2018/11/25/7.加壳脱壳/Clutch_2.png" alt="Clutch_2"></p>
+</li>
+<li><p>将Clutch文件拷贝到iPhone的/usr/bin目录<br><img src="/2018/11/25/7.加壳脱壳/Clutch_3.png" alt="Clutch_3"></p>
+</li>
+<li><p>如果在iPhone上执行Clutch指令，权限不够，赋予“可执行的权限”<br><img src="/2018/11/25/7.加壳脱壳/Clutch_4.png" alt="Clutch_4"></p>
+</li>
+</ul>
+<h2><span id="6clutch-使用">6.Clutch – 使用</span></h2><ul>
+<li><p>列出已安装的APP：Clutch -i<br><img src="/2018/11/25/7.加壳脱壳/Clutch使用_1.png" alt="Clutch使用_1"></p>
+</li>
+<li><p>输入APP序号或者Bundle Id进行脱壳操作：<strong>Clutch -d APP序号或BundleId</strong><br><img src="/2018/11/25/7.加壳脱壳/Clutch使用_2.png" alt="Clutch使用_2"></p>
+</li>
+<li><p>脱壳成功后会生成一个ipa文件<br><img src="/2018/11/25/7.加壳脱壳/Clutch使用_3.png" alt="Clutch使用_3"></p>
+</li>
+</ul>
+<h2><span id="7dumpdecrypted">7.dumpdecrypted</span></h2><ul>
+<li><p>下载源代码，然后在源代码目录执行make指令进行编译，获得dylib动态库文件<br><img src="/2018/11/25/7.加壳脱壳/dumpdecrypted_1.png" alt="dumpdecrypted_1"></p>
+</li>
+<li><p>将dylib文件拷贝到iPhone上（如果是root用户，建议放 <strong>/var/root</strong> 目录）</p>
+</li>
+<li>终端进入dylib所在的目录</li>
+<li>使用环境变量 <strong>DYLD_INSERT_LIBRARIES</strong> 将dylib注入到需要脱壳的可执行文件（可执行文件路径可以通过ps -A查看获取）</li>
+<li><p><strong>DYLD_INSERT_LIBRARIES=dumpdecrypted.dylib   可执行文件路径</strong><br><img src="/2018/11/25/7.加壳脱壳/dumpdecrypted_2.png" alt="dumpdecrypted_2"></p>
+</li>
+<li><p>.decrypted文件就是脱壳后的可执行文件<br><img src="/2018/11/25/7.加壳脱壳/dumpdecrypted_3.png" alt="dumpdecrypted_3"></p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>在使用过程中，可能会遇到以下错误:<br><img src="/2018/11/25/7.加壳脱壳/dumpdecrypted_4.png" alt="dumpdecrypted_4"></p>
+</li>
+<li><p>原因：对dylib所在的文件夹权限不够</p>
+</li>
+<li>解决方案：将dylib放在用户所在文件夹，比如</li>
+<li>如果是root用户，请将dylib放在/var/root目录</li>
+<li>如果是mobile用户，请将dylib放在/var/mobile目录</li>
+</ul>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/04/6.Mach-O/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -369,7 +590,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-11 03:05:34" itemprop="dateModified" datetime="2018-11-11T03:05:34+08:00">2018-11-11</time>
+                <time title="修改时间：2018-11-25 04:06:11" itemprop="dateModified" datetime="2018-11-25T04:06:11+08:00">2018-11-25</time>
               
             
           </span>
@@ -2253,185 +2474,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/KVC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="小马同学">
-      <meta itemprop="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="小马同学的技术博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/11/KVC/" itemprop="url">
-                  KVC
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2018-09-11 23:37:08" itemprop="dateCreated datePublished" datetime="2018-09-11T23:37:08+08:00">2018-09-11</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-24 22:26:28" itemprop="dateModified" datetime="2018-09-24T22:26:28+08:00">2018-09-24</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>iOS | KVC | Objective-C</p>
-<p>通过KVC修改属性会不会触发KVO，KVC底层实现是什么样子？</p>
-<h2><span id="1kvc">1.KVC</span></h2><p>KVC的全称是Key-Value Coding，俗称“键值编码”，可以通过一个key来访问某个属性</p>
-<p>常见API:<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 赋值</span></span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">void</span>)setValue:(<span class="keyword">id</span>)value forKey:(<span class="built_in">NSString</span> *)key;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKeyPath:(<span class="built_in">NSString</span> *)keyPath;</span><br><span class="line">- (<span class="keyword">id</span>)valueForKey:(<span class="built_in">NSString</span> *)key;</span><br></pre></td></tr></table></figure></p>
-<h2><span id="2通过kvc修改属性会触发kvo么">2.通过KVC修改属性会触发KVO么</span></h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Observer</span></span></span><br><span class="line">- (<span class="keyword">void</span>)observeValueForKeyPath:(<span class="built_in">NSString</span> *)keyPath ofObject:(<span class="keyword">id</span>)object change:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSKeyValueChangeKey</span>,<span class="keyword">id</span>&gt; *)change context:(<span class="keyword">void</span> *)context &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, change);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Observer *observer = [[Observer alloc] init];</span><br><span class="line">Person *person = [[Person alloc] init];</span><br><span class="line"></span><br><span class="line">[person addObserver:observer forKeyPath:<span class="string">@"age"</span> options:<span class="built_in">NSKeyValueObservingOptionNew</span>|<span class="built_in">NSKeyValueObservingOptionOld</span> context:<span class="literal">NULL</span>];</span><br><span class="line"></span><br><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br><span class="line"></span><br><span class="line">[person removeObserver:observer forKeyPath:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure>
-<p>通过控制台输出，发现是可以触发KVO的</p>
-<h2><span id="3setvalueforkey">3.setValue:forKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="setValue:forKey:"><br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[person setValue:@<span class="number">20</span> forKey:<span class="string">@"age"</span>];</span><br></pre></td></tr></table></figure></p>
-<p>上面这行代码相当于下面这几行，在对属性赋值的时候系统内部会自动调用 willChangeValueForKey 和 didChangeValueForKey，所以会触发 KVO，可以重写这两个方法进行验证。<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[person willChangeValueForKey:<span class="string">@"age"</span>];</span><br><span class="line">person-&gt;_age = <span class="number">20</span>;</span><br><span class="line">[person didChangeValueForKey:<span class="string">@"key"</span>];</span><br></pre></td></tr></table></figure></p>
-<h2><span id="4valueforkey">4.valueForKey</span></h2><p><img src="/2018/09/11/KVC/setValueForKey.png" alt="valueForKey:"></p>
-
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2483,7 +2525,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-count">17</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2539,7 +2581,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">13</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
