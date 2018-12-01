@@ -306,6 +306,185 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Category/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小马同学">
+      <meta itemprop="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小马同学的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/18/Category/" itemprop="url">
+                  Category
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-18 23:08:48" itemprop="dateCreated datePublished" datetime="2018-09-18T23:08:48+08:00">2018-09-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-09-24 22:26:38" itemprop="dateModified" datetime="2018-09-24T22:26:38+08:00">2018-09-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/iOS底层原理/" itemprop="url" rel="index"><span itemprop="name">iOS底层原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>iOS | Category | Objective-C</p>
+<p>Category的实现原理？Category和Class Extension的区别是什么？Category中的load方法时什么时候调用的？如何给分类添加属性？</p>
+<hr>
+<p>通过前面章节，我们有学习到OC实例方法存储在class对象里面，类方法存储在meta-class里面，那么分类里面方法呢，难道是一个新的对象来进行存储么？</p>
+<p>答案肯定是否，<strong>class对象、meta-class对象在内存中只会存在一份，分类里面的方法会合并到class对象、meta-class中</strong>。</p>
+<h2><span id="1category的实现原理">1.Category的实现原理</span></h2><p>Category内方法是什么时候合并到class、meta-class对象中的，是在编译阶段么？</p>
+<p>并不是，是在程序运行时通过runtime机制动态将分类的方法合并到class、meta-class对象中。下面来通过探索源码来进行分析验证。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span> (<span class="title">Test_A</span>)</span></span><br><span class="line">+ (<span class="keyword">void</span>)testA;</span><br><span class="line">- (<span class="keyword">void</span>)testA;</span><br><span class="line"><span class="keyword">@end</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">Person</span> (<span class="title">Test_A</span>)</span></span><br><span class="line">+ (<span class="keyword">void</span>)testA &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%s"</span>, __func__);</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="keyword">void</span>)testA &#123;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"%s"</span>, __func__);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>通过clang编译器将 Person+Test_A.m 文件转成cpp文件，搜索 struct _category_t {<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> _category_t &#123;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">char</span> *name;</span><br><span class="line"><span class="keyword">struct</span> _class_t *cls;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _method_list_t *instance_methods;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _method_list_t *class_methods;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _protocol_list_t *protocols;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">struct</span> _prop_list_t *properties;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>Person+Test_A这个分类在编译完，转成上面这种结构，Test_A分类里面的方法、协议、属性信息也是存储在这个结构体中。每编写一个分类，就相当于一个 struct _category_t 类型的结构体，在程序运行时，通过runtime机制动态的将这个结构体内部的方法、协议等合并到类对象中。</p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/11/KVC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1706,7 +1885,7 @@
 <h2><span id="欢迎交流指点并提出宝贵意见">欢迎交流指点并提出宝贵意见</span></h2><ul>
 <li>Github：<a href="https://github.com/iStonesy" target="_blank" rel="noopener">@小马同学的Github</a></li>
 <li>简书：<a href="https://www.jianshu.com/u/03a336dff0ec" target="_blank" rel="noopener">@小马同学的简书</a></li>
-<li>邮箱：<a href="mailto:&#122;&#x7a;&#x75;&#109;&#x61;&#x6c;&#x65;&#105;&#64;&#x31;&#54;&#x33;&#x2e;&#x63;&#111;&#109;" target="_blank" rel="noopener">&#122;&#x7a;&#x75;&#109;&#x61;&#x6c;&#x65;&#105;&#64;&#x31;&#54;&#x33;&#x2e;&#x63;&#111;&#109;</a></li>
+<li>邮箱：<a href="mailto:&#122;&#x7a;&#117;&#109;&#97;&#x6c;&#x65;&#105;&#64;&#49;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;" target="_blank" rel="noopener">&#122;&#x7a;&#117;&#109;&#97;&#x6c;&#x65;&#105;&#64;&#49;&#x36;&#51;&#46;&#x63;&#x6f;&#x6d;</a></li>
 <li>QQ：492843636</li>
 </ul>
 
@@ -1798,7 +1977,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-count">18</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1858,7 +2037,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
