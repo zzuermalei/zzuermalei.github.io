@@ -306,6 +306,237 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/24/编译器王者-LLVM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="小马同学">
+      <meta itemprop="description" content="iOS小白一枚，写这个博客，首先是为了总结，通过写作来提高自己的写作和表达能力。其次是想把自己理解的东西分享给大家，与大家进行交流，也希望大家可以指出我的不足并提供宝贵的意见！">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小马同学的技术博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/24/编译器王者-LLVM/" itemprop="url">
+                  编译器王者-LLVM
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-24 19:22:19" itemprop="dateCreated datePublished" datetime="2018-09-24T19:22:19+08:00">2018-09-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-03 17:26:10" itemprop="dateModified" datetime="2018-10-03T17:26:10+08:00">2018-10-03</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编译原理/" itemprop="url" rel="index"><span itemprop="name">编译原理</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>iOS | LLVM | Objective-C</p>
+<h1><span id="llvm-是什么">LLVM 是什么？</span></h1><p><img src="/2018/09/24/编译器王者-LLVM/LLVM_Logo.svg" alt="LLVM-logo"></p>
+<blockquote>
+<p>The LLVM Project is a collection of modular and reusable compiler and toolchain technologies.<br>官网：<a href="https://llvm.org/" target="_blank" rel="noopener">https://llvm.org/</a></p>
+</blockquote>
+<p>LLVM 项目是模块化、可重用的编译器以及工具链技术的集合，美国计算机协会（ACM）将其2012年软件系统奖项颁给了LLVM，之前曾获得此奖项的软件和技术包括：Java、Apache、Mosaic、the World Wide Web、Smalltalk、UNIX、Eclipse等</p>
+<p>创始人： Chris Lattner，亦是Swift之父</p>
+<blockquote>
+<ul>
+<li>有些文章把 LLVM 当做 Low Level Virtual Machine（低级虚拟机）的缩写简称，官方描述如下:</li>
+<li>The name “LLVM” itself is not an acronym; it is the full name of the project.<br>“LLVM” 不是首字母缩略词，它是项目的全称</li>
+</ul>
+</blockquote>
+<h1><span id="传统的编译器架构">传统的编译器架构</span></h1><p><img src="/2018/09/24/编译器王者-LLVM/传统编译器架构.png" alt="传统编译器架构"><br>传统编译器架构：</p>
+<ul>
+<li>Frontend：前端（词法分析、语法分析、语义分析、生成中间代码）</li>
+<li>Optimizer：优化器（中间代码优化）</li>
+<li>Backend：后端（生成对应平台、设备、架构机器码）</li>
+</ul>
+<h1><span id="llvm架构">LLVM架构</span></h1><p><img src="/2018/09/24/编译器王者-LLVM/LLVM编译器架构.png" alt="传统编译器架构"><br>不同的前端后端使用统一的中间代码 LLVM Intermediate Representation（LLVM IR）</p>
+<p>统一中间代码的优点：<br>1&gt; 如果需要支持一种新的编程语言，只需要实现一个新的前端<br>2&gt; 如果需要支持一种新的硬件设备，只需要实现一个新的后端<br>3&gt; 优化阶段是一个通用的阶段，它针对的是统一的 LLVM IR，不论是支持新的编程语言，还是支持新的硬件设备，都不需要对优化阶段做修改</p>
+<p>相比之下，GCC 的前端和后端没有分的太开，前端后端耦合在一起。所以 GCC 为了支持一门新的语言，或者支持一个新的目标平台，就变得非常困难</p>
+<p>LLVM 现在被作为实现各种静态和运行时编译语言的通用基础结构（GCC家族、JAVA、.NET、Python、Ruby、Scheme、Haskell等）</p>
+<h1><span id="clang">Clang</span></h1><p>1&gt; 什么是 Clang ?<br>Clang 是 LLVM 项目的一个子项目，基于 LLVM 架构 C/C++/Objective-C 的编译器前端</p>
+<p>官网：<a href="http://clang.llvm.org/" target="_blank" rel="noopener">http://clang.llvm.org/</a></p>
+<p>2&gt; 相比于 GCC，Clang 具有如下有点：<br><strong>编译速度快</strong>：在某些平台上，Clang 的编译速度显著的快过 GCC（Debug 模式下编译 OC 速度比 GCC 快 3 倍）<br><strong>占用内存小</strong>：Clang 生成的 AST(语法树) 所占用的内存是 GCC 的五分之一左右<br><strong>模块化设计</strong>：Clang 采用基于库的模块化设计，易于 IDE 继承及其他用途的作用<br><strong>诊断信息可读性强</strong>：在编译过程中，Clang 创建并保留了大量详细的元数据（metadata），有利于调试和错误定位<br><strong>设计清晰简单</strong>，容易理解，易于扩展增强</p>
+<h1><span id="clang-与-llvm">Clang 与 LLVM</span></h1><p><img src="/2018/09/24/编译器王者-LLVM/Clang-LLVM_1.jpg" alt="传统编译器架构"><br><strong>广义的 LLVM</strong>：整个 LLVM 架构<br><strong>狭义的 LLVM</strong>：LLVM 后端（代码优化、目标代码生成等）</p>
+<p><img src="/2018/09/24/编译器王者-LLVM/Clang-LLVM_2.png" alt="传统编译器架构"></p>
+<h1><span id="oc源文件的编译过程">OC源文件的编译过程</span></h1><p><strong>命令行查看编译的过程</strong>：$ clang -ccc-print-phases main.m<br><img src="/2018/09/24/编译器王者-LLVM/OC源文件编译过程1.png" alt="OC源文件编译器过程1"><br>输入 main.m =&gt; 预处理器，预处理（include、import、宏定义…），输出 cpp 文件 =&gt; compiler 编译成中间代码 ir =&gt; 后端，目标代码 =&gt; 链接动态库等 =&gt; 适合 ** 架构的代码</p>
+<p><strong>查看preprocessor（预处理）的结果</strong>：$ clang -E main.m</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#include <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#define AGE 30</span></span><br><span class="line"><span class="keyword">int</span> main(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[]) &#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">int</span> c = a + b + AGE;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/2018/09/24/编译器王者-LLVM/OC源文件编译过程1.png" alt="OC源文件编译过程2"><br>执行上面的命令行之后，发现预处理器将 &lt;stdio.h&gt; 中代码引了进来，而且将 AGE 宏 也替换成了 30</p>
+<h1><span id="词法分析">词法分析</span></h1><p><strong>词法分析，生成 Token</strong>：$ clang -fmodules -E -Xclang -dump-tokens main.m<br><img src="/2018/09/24/编译器王者-LLVM/词法分析.png" alt="OC源文件编译过程2"><br>将代码中每个部分生成 token，’int’、’main’、’(‘、’int’、’argc’ …，一遍后面分析，Loc=<a href="main.m:13:9" target="_blank" rel="noopener">main.m:13:9</a>表示 main.m 13 行第 9 个字符</p>
+<h1><span id="语法树-ast">语法树 - AST</span></h1><p><strong>语法分析，生成语法树（AST，Abstract Syntax Tree）</strong>：$ clang -fmodules -fsyntax-only -Xclang -ast-dump main.m</p>
+<p>词法分析之后将 Token 拼接、联系起来，生成语法树：<br><img src="/2018/09/24/编译器王者-LLVM/语法树.png" alt="OC源文件编译过程2"></p>
+<h1><span id="llvm-ir">LLVM IR</span></h1><p>LLVM IR 有3中表示形式（但本质是等价的，就好比水可以有气体、液体、固体3中形态）</p>
+<p><strong>1&gt;text</strong>：便于阅读的文本格式，类似于汇编语言，扩展名 .ll，$ clang -S -emit-llvm main.m<br><strong>2&gt;memory</strong>：内存格式<br><strong>3&gt;bitcode</strong>：二进制格式，扩展名 .bc，$ clang -c -emit-llvm main.m</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> test(<span class="keyword">int</span> a, <span class="keyword">int</span> b) &#123;</span><br><span class="line">    <span class="keyword">int</span> c = a + b - <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码生成 text 格式中间代码：<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">define <span class="keyword">void</span> @test(i32, i32) <span class="meta">#0 &#123;</span></span><br><span class="line">    <span class="comment">// 定义一个局部变量 int a </span></span><br><span class="line">    %<span class="number">3</span> = alloca i32, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 定义一个局部变量 int b</span></span><br><span class="line">    %<span class="number">4</span> = alloca i32, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 定义一个局部变量 int c</span></span><br><span class="line">    %<span class="number">5</span> = alloca i32, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 将 0（第一个参数）的值赋给 3，即 a</span></span><br><span class="line">    store i32 %<span class="number">0</span>, i32* %<span class="number">3</span>, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 将 1（第二个参数）的值赋给 4，即 b</span></span><br><span class="line">    store i32 %<span class="number">1</span>, i32* %<span class="number">4</span>, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 读取 3 的值给 6，即 a</span></span><br><span class="line">    %<span class="number">6</span> = load i32, i32* %<span class="number">3</span>, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 读取 4 的值给 7，即 b</span></span><br><span class="line">    %<span class="number">7</span> = load i32, i32* %<span class="number">4</span>, align <span class="number">4</span></span><br><span class="line">    <span class="comment">// 6 + 7，即 a + b，给 8</span></span><br><span class="line">    %<span class="number">8</span> = add nsw i32 %<span class="number">6</span>, %<span class="number">7</span></span><br><span class="line">    <span class="comment">// 8 - 3，即 a + b - 3</span></span><br><span class="line">    %<span class="number">9</span> = sub nsw i32 %<span class="number">8</span>, <span class="number">3</span></span><br><span class="line">    <span class="comment">// 将 a + b - 3 的结果给 5，即 c，即 c = a + b - 3</span></span><br><span class="line">    store i32 %<span class="number">9</span>, i32* %<span class="number">5</span>, align <span class="number">4</span></span><br><span class="line">    ret <span class="keyword">void</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>IR 基本语法:</strong><br>1&gt; 注释以分号<strong> ;</strong> 开头<br>2&gt; 全局标识符以<strong>@</strong>开头，局部标识符以<strong>%</strong>开头<br>3&gt; <strong>alloca</strong>，在当前函数栈帧中分配内存<br>4&gt; <strong>i32</strong>，32bit，4个字节的意思<br>5&gt; <strong>align</strong>，内存对齐<br>6&gt; <strong>store</strong>，写入数据<br>7&gt; <strong>load</strong>，读取数据</p>
+<p>官方语法参考：<br><a href="https://llvm.org/docs/LangRef.html" target="_blank" rel="noopener">https://llvm.org/docs/LangRef.html</a></p>
+<hr>
+<p>上面带大家简单熟悉了下 LLVM，感兴趣的童鞋可以进入官网自行深入研究。光了解是不是有点无趣呢，接下来，我们来开发一个我们自己的编译器插件</p>
+<h1><span id="llvm-clang-源码下载">LLVM、Clang 源码下载</span></h1><p>下载LLVM<br>\$ <a href="https://git.llvm.org/git/llvm.git/" target="_blank" rel="noopener">https://git.llvm.org/git/llvm.git/</a><br>大小 661.3 M，仅供参考</p>
+<p>下载clang<br>\$ cd llvm/tools<br>$ git clone <a href="https://git.llvm.org/git/clang.git/" target="_blank" rel="noopener">https://git.llvm.org/git/clang.git/</a><br>大小 242.9 M，仅供参考</p>
+<h1><span id="源码编译">源码编译</span></h1><p>我们在终端可以敲 clang 命令，是因为在 Xcode …/XcodeDefault.xctoolchain/user/bin目录下已经安装了Clang，并且MAC 默认用的是 Xcode 内置的 Clang。既然我们要开发自己的编译器插件，所以在源码下载完成之后，我们需要编译我们自己的 Clang</p>
+<p><strong>安装 cmake 和 ninja</strong>（先安装brew，<a href="https://brew.sh" target="_blank" rel="noopener">https://brew.sh</a>）<br>1&gt; $ brew install cmake<br>2&gt; $ brew install ninja</p>
+<p><strong>注</strong>：ninja 如果安装失败，可以直接从 github 获取 release 版放入 <strong>/usr/local/bin</strong>中，<a href="https://github.com/ninja-build/ninja/releases" target="_blank" rel="noopener">https://github.com/ninja-build/ninja/releases</a></p>
+<hr>
+<p>在LLVM源码统计目录下新建一个 <strong>llvm_build</strong>目录（最终会在 <strong>llvm_build</strong> 目录下生成 <strong>build.ninja</strong>）</p>
+<p>/LLVM_ALL/llvm<br>/LLVM_ALL/llvm_build<br>/LLVM_ALL/llvm_release<br>/LLVM_ALL/llvm_xcode</p>
+<p><strong>$ cd llvm_build</strong><br><strong>$ cmake -G Ninja ../llvm</strong>(指定 llvm 源码位置，会将 llvm 源码在llvm_build 目录下生成 ninja 的模板，注：llvm 路径需根据自己的 llvm 目录相对于 llvm_build 的位置) <strong>成功的标识</strong>：llvm_build 目录下生成 build.ninja 文件</p>
+<p><strong>指定LLVM编译目标路径：</strong><br><strong>$ cmake -G Ninja ../llvm -DCMAKE_INSTALL_PREFIX=LLVM的安装路径</strong><br>(eg.)  $ cmake -G Ninja ../llvm -DCMAKE_INSTALL_PREFIX=/users/<em>username</em>/Desktop/项目/LLVM_ALL/llvm_release/</p>
+<p>更多 cmake 相关选项，可以参考：<a href="https://llvm.org/docs/CMake.html" target="_blank" rel="noopener">https://llvm.org/docs/CMake.html</a></p>
+<hr>
+<p>依次执行编译、安装指令<br><strong>$ ninja</strong><br>编译完毕后， <strong>llvm_build</strong> 目录大概 21.61 G（仅供参考）<br><strong>$ ninja install</strong><br>安装完毕后，安装目录大概 12.21 G（仅供参考）</p>
+<hr>
+<p>生成 Xcode 模板工程，使用 Xcode 进行编译<br><strong>$ cd llvm_xcode</strong><br><strong>$ cmake -G Xcode ../llvm</strong></p>
+<h1><span id="应用与实践">应用与实践</span></h1><p>1&gt; libclang、libTooling<br>官方参考：<a href="https://clang.llvm.org/docs/Tooling.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/Tooling.html</a><br>应用：<strong>语法树分析</strong>、<strong>语言转换</strong>等</p>
+<p>2&gt; Clang 插件开发<br>官方参考：<br><a href="https://clang.llvm.org/docs/" target="_blank" rel="noopener">https://clang.llvm.org/docs/</a><br><a href="https://clang.llvm.org/docs/ClangPlugins.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/ClangPlugins.html</a><br><a href="https://clang.llvm.org/docs/ExternalClangExamples.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/ExternalClangExamples.html</a><br><a href="https://clang.llvm.org/docs/RAVFrontendAction.html" target="_blank" rel="noopener">https://clang.llvm.org/docs/RAVFrontendAction.html</a><br>应用：<strong>代码检查（命名规范、代码规范）</strong>等</p>
+<p>3&gt; Pass开发<br>官方参考：<a href="http://llvm.org/docs/WritingAnLLVMPass.html" target="_blank" rel="noopener">http://llvm.org/docs/WritingAnLLVMPass.html</a><br>应用：<strong>代码优化</strong>、<strong>代码混淆</strong>等</p>
+<p>4&gt; 开发新的编程语言<br><a href="https://llvm-tutorial-cn.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://llvm-tutorial-cn.readthedocs.io/en/latest/index.html</a><br><a href="https://kaleidoscope-llvm-tutorial-zh-cn.readthedocs.io/zh_CN/latest/" target="_blank" rel="noopener">https://kaleidoscope-llvm-tutorial-zh-cn.readthedocs.io/zh_CN/latest</a></p>
+
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Category/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1885,7 +2116,7 @@
 <h2><span id="欢迎交流指点并提出宝贵意见">欢迎交流指点并提出宝贵意见</span></h2><ul>
 <li>Github：<a href="https://github.com/iStonesy" target="_blank" rel="noopener">@小马同学的Github</a></li>
 <li>简书：<a href="https://www.jianshu.com/u/03a336dff0ec" target="_blank" rel="noopener">@小马同学的简书</a></li>
-<li>邮箱：<a href="mailto:&#122;&#x7a;&#117;&#x6d;&#x61;&#108;&#101;&#105;&#x40;&#x31;&#x36;&#x33;&#46;&#x63;&#111;&#109;" target="_blank" rel="noopener">&#122;&#x7a;&#117;&#x6d;&#x61;&#108;&#101;&#105;&#x40;&#x31;&#x36;&#x33;&#46;&#x63;&#111;&#109;</a></li>
+<li>邮箱：<a href="mailto:&#x7a;&#x7a;&#117;&#x6d;&#x61;&#108;&#x65;&#x69;&#x40;&#49;&#54;&#51;&#46;&#x63;&#x6f;&#109;" target="_blank" rel="noopener">&#x7a;&#x7a;&#117;&#x6d;&#x61;&#108;&#x65;&#x69;&#x40;&#49;&#54;&#51;&#46;&#x63;&#x6f;&#109;</a></li>
 <li>QQ：492843636</li>
 </ul>
 
@@ -1977,7 +2208,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-count">19</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2098,7 +2329,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
   <span class="with-love" id="animate">
     <i class="fa fa-snowflake-o"></i>
   </span>
